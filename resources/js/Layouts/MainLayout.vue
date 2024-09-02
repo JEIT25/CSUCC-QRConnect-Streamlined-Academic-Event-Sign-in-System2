@@ -5,8 +5,8 @@
                 <div class="container mx-auto flex items-center justify-between p-4">
                     <!-- Left-aligned logo and brand name -->
                     <Link class="text-yellow-500 font-bold text-xl flex items-center" href="/">
-                        <img :src="props.logoUrl" alt="Logo" width="30" height="24" class="mr-2">
-                        CSUCC QRConnect
+                    <img :src="props.logoUrl" alt="Logo" width="30" height="24" class="mr-2">
+                    CSUCC QRConnect
                     </Link>
                     <!-- Right-aligned navigation links -->
                     <div class="lg:flex items-center hidden space-x-8">
@@ -14,17 +14,17 @@
                             <li>
                                 <Link class="text-yellow-500 hover:text-yellow-200" aria-current="page"
                                     href="{{ route('attendees.create') }}">
-                                    Generate QR Code
+                                Generate QR Code
                                 </Link>
                             </li>
                             <li>
                                 <Link class="text-yellow-400 hover:text-yellow-200" href="">
-                                    Events
+                                Events
                                 </Link>
                             </li>
                             <li>
                                 <Link class="text-yellow-400 hover:text-yellow-200" href="">
-                                    Log in as admin
+                                Log in
                                 </Link>
                             </li>
                         </ul>
@@ -44,17 +44,17 @@
                         <li>
                             <Link class="text-yellow-400 hover:text-yellow-200" aria-current="page"
                                 href="{{ route('attendees.create') }}">
-                                Generate QR Code
+                            Generate QR Code
                             </Link>
                         </li>
                         <li>
                             <Link class="text-yellow-400 hover:text-yellow-200" href="">
-                                Events
+                            Events
                             </Link>
                         </li>
                         <li>
                             <Link class="text-yellow-400 hover:text-yellow-200" href="">
-                                Log in as admin
+                            Log in as admin
                             </Link>
                         </li>
                     </ul>
@@ -63,21 +63,29 @@
         </header>
 
         <main>
+            <div class="mb-4 border round-md shadow-md border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900 p-2"
+                v-if="successMess">
+                {{ successMess }}
+            </div>
             <slot></slot>
         </main>
     </div>
-    
+
 </template>
 <style scoped>
     .dark-blue {background-color: rgb(94, 118, 145) !important;}
 </style>
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
 const menuOpen = ref(false);
 const props = defineProps({
     logoUrl: String,
 })
+const successMess = computed(() => page.props.messages.success)
 const toggleMenu = () => {
     menuOpen.value = !menuOpen.value;
 };

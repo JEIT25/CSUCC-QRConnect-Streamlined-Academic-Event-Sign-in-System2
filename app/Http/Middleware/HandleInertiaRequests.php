@@ -39,6 +39,9 @@ class HandleInertiaRequests extends Middleware
             'logoUrl' => asset('assets/images/logos/qr-logo.png'),
             'qrBackground' => asset('assets/images/backgrounds/qr-gif.gif'),
             'coloredBackgroundImage' => asset('assets/images/backgrounds/welcome-bg.png'),
+            'messages' => [
+                'success' => $request->session()->get('success')
+            ]
         ]);
     }
 }
