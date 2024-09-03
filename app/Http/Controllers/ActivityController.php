@@ -64,7 +64,7 @@ class ActivityController extends Controller
 
         switch($request->type) {
             case 'event':
-                return redirect()->route('event.index')
+                return redirect()->route('activities.index')
                     ->with('success', 'SUCCESS!');
 
             // case 'subject':
@@ -81,15 +81,23 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Activity $activity)
     {
-        //
+       if($activity->profile_image) {
+            $activity->profile_image = asset("storage/$activity->profile_image"); //using the asset() set profile image path to public path
+       }
+        return inertia(
+            'Event/Show',
+            [
+                'event' => $activity,
+            ]
+        );
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Activity $activity)
     {
         //
     }

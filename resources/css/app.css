@@ -11,5 +11,9 @@
   }
 
   .input-error {
-    @apply text-sm text-red-500 
+    @apply text-sm text-red-500
+  }
+
+    .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-500 text-white font-medium p-2 rounded-md
   }

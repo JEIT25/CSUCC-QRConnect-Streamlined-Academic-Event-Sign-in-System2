@@ -74,7 +74,7 @@ const form = useForm({
 })
 
 const submitForm = () => {
-    form.post('/event')
+    form.post('/activities')
 }
 
 const handleFileUpload = (event) => {

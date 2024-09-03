@@ -18,7 +18,7 @@
                                 </Link>
                             </li>
                             <li>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/activities">
                                 Events
                                 </Link>
                             </li>

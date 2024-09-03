@@ -8,5 +8,5 @@ Route::get('/', function () {
     return Inertia::render('Index/Index');
 });
 
-Route::resource('event', ActivityController::class)
-    ->only('index','create','store');
+Route::resource('activities', ActivityController::class)
+    ->only('index','create','store','show');

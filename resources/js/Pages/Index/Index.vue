@@ -17,9 +17,9 @@
                 </h1>
                 <p class="mt-4 text-sm md:text-base text-gray-700">
                     A cutting-edge solution designed to simplify and optimize the process
-                    of attendee check-ins for various academic events. With a focus on
+                    of attendance for various academic activities. With a focus on
                     efficiency and user-friendliness, our system offers a seamless
-                    experience for event organizers and attendees alike.
+                    experience for facilitators ,guest and attendeees alike.
                 </p>
             </div>
         </div>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps({
     qrBackground: String,
     qrGif: String,
