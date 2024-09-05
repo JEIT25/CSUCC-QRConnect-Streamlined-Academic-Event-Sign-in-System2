@@ -1,49 +1,57 @@
 <template>
     <div class="container mx-auto px-4 py-6 flex justify-center items-center min-h-screen">
-        <div class="bg-gray-100 shadow-2xl rounded-lg p-6 w-full max-w-2xl">
+        <div class="bg-gray-100 shadow-2xl rounded-lg p-6 w-full max-w-4xl">
             <!-- Profile Image -->
-            <div class="flex flex-col items-center mb-4">
-                <label class="text-sm font-medium text-gray-700 mb-2">Profile Image</label>
-                <img :src="event.profile_image" alt="Profile Image" class="w-50 h-50 rounded-lg shadow-md object-cover">
-            </div>
+            <div class="flex flex-col md:flex-row items-center mb-6 md:space-x-6">
+                <div class="flex-shrink-0">
+                    <label class="text-md font-medium text-gray-700 mb-2 block text-center md:text-left">Event Profile
+                        Image</label>
+                    <img :src="event.profile_image" alt="Profile Image"
+                        class="w-40 h-40 md:w-full md:h-48 rounded-lg shadow-md object-cover">
+                </div>
 
-            <!-- Activity Details -->
-            <div class="flex flex-col items-center md:items-start mb-6">
-                <div class="mb-4 text-center md:text-left">
-                    <label class="text-sm font-medium text-gray-500">Event Name</label>
-                    <h3 class="text-2xl font-bold">{{ event.name }}</h3>
-                </div>
-                <div class="mb-4 text-center md:text-left">
-                    <label class="text-sm font-medium text-gray-500">Description</label>
-                    <p class="text-gray-700">{{ event.description }}</p>
-                </div>
-                <div class="text-center md:text-left">
-                    <label class="text-sm font-medium text-gray-500">Start Date</label>
-                    <p class="text-sm text-gray-500">{{ new Date(event.start_date).toLocaleDateString() }}</p>
+                <!-- Activity Details -->
+                <div class="mt-4 md:mt-0 flex-1">
+                    <div class="mb-4">
+                        <label class="text-sm font-medium text-gray-500">Event Name</label>
+                        <h3 class="text-2xl font-bold">{{ event.name }}</h3>
+                    </div>
+                    <div class="mb-4">
+                        <label class="text-sm font-medium text-gray-500">Description</label>
+                        <p class="text-gray-700">{{ event.description }}</p>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Start Date</label>
+                        <p class="text-sm text-gray-500">{{ new Date(event.start_date).toLocaleDateString() }}</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 w-full">
-                <Link :href="`/activities/${event.id}/check-in`"
-                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-md text-center"
-                    as="button" method="get">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                <Link :href="`/events/${event.id}/check-in`" class="btn-primary" as="button" method="get">
                 Check-In
                 </Link>
-                <Link :href="`/activities/${event.id}/check-out`"
-                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-md text-center"
-                    as="button" method="get">
+                <Link :href="`/events/${event.id}/check-out`" class="btn-primary" as="button" method="get">
                 Check-Out
                 </Link>
-                <Link :href="`/activities/${event.id}/attendance`"
-                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-md text-center"
-                    as="button" method="get">
+                <Link :href="`/events/${event.id}/attendance`" class="btn-primary" as="button" method="get">
                 View Attendance List
                 </Link>
-                <Link :href="`/activities/${event.id}/export`"
-                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-md text-center"
-                    as="button" method="get">
+                <Link :href="`/events/${event.id}/export`" class="btn-primary" as="button" method="get">
                 Export Attendance
+                </Link>
+                <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
+                Add MasterList
+                </Link>
+                <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
+                View MasterList
+                </Link>
+                <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
+                Edit
+                </Link>
+                <Link :href="`/events/${event.id}`" class="btn-primary" as="button" method="delete">
+                Delete
                 </Link>
             </div>
         </div>
@@ -57,3 +65,4 @@ defineProps({
     event: Object
 });
 </script>
+

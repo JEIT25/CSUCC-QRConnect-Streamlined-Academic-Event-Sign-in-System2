@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Create New Event</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center">Edit Event</h2>
 
         <form @submit.prevent="submitForm" enctype="multipart/form-data">
             <!-- Name -->
@@ -16,7 +16,7 @@
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                 <textarea v-model="form.description" id="description" class="input" rows="4"></textarea>
-                <div class="input-error" v-if="form.errors.location">
+                <div class="input-error" v-if="form.errors.description">
                     {{ form.errors.description }}
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="mb-4">
                 <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
                 <input v-model="form.location" type="text" id="location" class="input"
-                    placeholder="City,Baranggay,Street" />
+                    placeholder="City, Baranggay, Street" />
                 <div class="input-error" v-if="form.errors.location">
                     {{ form.errors.location }}
                 </div>
@@ -43,7 +43,7 @@
             <!-- Profile Image -->
             <div class="mb-4">
                 <label for="profile_image" class="block text-sm font-medium text-gray-700">Profile Image</label>
-                <input @change="handleFileUpload" type="file" id="profile_image"
+                <input @change="addFile" type="file" id="profile_image"
                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                 <div class="input-error" v-if="form.errors.profile_image">
                     {{ form.errors.profile_image }}
@@ -54,7 +54,7 @@
             <div class="mt-6">
                 <button type="submit"
                     class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Submit
+                    Save Changes
                 </button>
             </div>
         </form>
@@ -62,25 +62,33 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
 import { useForm } from '@inertiajs/vue3'
+import { ref } from 'vue'
 import debounce from 'lodash/debounce'
-const form = useForm({
-    name: '',
-    description: '',
-    location: '',
-    start_date: '',
-    profile_image: null,
+
+const props = defineProps({
+    event: Object,
 })
-const handleFileUpload = (event) => {
+
+let form = useForm({
+    name: props.event.name,
+    description: props.event.description,
+    location: props.event.location,
+    start_date: props.event.start_date,
+    profile_image: null,
+    _method: 'PUT' //set as put since html only accept post for file upload(solution)
+})
+
+const addFile = (event) => {
     form.profile_image = event.target.files[0]
 }
+
 const isSubmitting = ref(false)
 // Debounce the submit handler
 const debouncedSubmit = debounce(() => {
     isSubmitting.value = true
     try {
-        form.post('/events')
+        form.post(`/events/${props.event.id}`)//submit a post request but when sent to backend it is turned into a put request
         console.log('Form submitted successfully.')
     } catch (error) {
         console.error('Error submitting form:', error)

@@ -18,8 +18,14 @@
                                 </Link>
                             </li>
                             <li>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/activities">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/events">
                                 Events
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/events/create">
+                                Create an event
                                 </Link>
                             </li>
                             <li>
@@ -48,8 +54,13 @@
                             </Link>
                         </li>
                         <li>
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="">
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/events">
                             Events
+                            </Link>
+                        </li>
+                        <li>
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/events/create">
+                            Create an event
                             </Link>
                         </li>
                         <li>
@@ -63,7 +74,7 @@
         </header>
 
         <main>
-            <div class="mb-4 border round-md shadow-md border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900 p-2"
+            <div class="mb-4 border round-md shadow-md border-green-200 bg-green-100 p-2 text-center text-black-100 font-semibold"
                 v-if="successMess">
                 {{ successMess }}
             </div>

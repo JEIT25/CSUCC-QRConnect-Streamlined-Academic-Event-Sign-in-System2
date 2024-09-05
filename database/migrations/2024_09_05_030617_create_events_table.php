@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activities', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
             $table->string('code')->nullable();
             $table->string('name');
             $table->longText('description')->nullable();
             $table->string('location')->nullable();
             $table->date('start_date');
             $table->string('profile_image')->nullable();
+            $table->boolean('is_restricted')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activities');
+        Schema::dropIfExists('events');
     }
 };

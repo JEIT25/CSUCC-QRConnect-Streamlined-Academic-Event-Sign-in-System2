@@ -28,6 +28,7 @@
 
 <script setup>
 
+
 const props = defineProps({
     qrBackground: String,
     qrGif: String,
