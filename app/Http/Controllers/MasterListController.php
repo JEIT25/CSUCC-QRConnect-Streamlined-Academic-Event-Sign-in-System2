@@ -11,6 +11,7 @@ class MasterListController extends Controller
 
     public function show(Event $event)
     {
+
         return inertia(
             "MasterList/Show",
             [
@@ -21,7 +22,6 @@ class MasterListController extends Controller
 
     public function create(Event $event)
     {
-        dd("hi");
         if (!$event->master_list()->exists()) {
             return inertia(
                 'MasterList/Create',
@@ -37,7 +37,7 @@ class MasterListController extends Controller
 
     public function store(Request $request, Event $event) //define Event class to recieve the EVent instance that contains the current event
     {
-        if (!$event->master_list()->exist()) {
+        if (!$event->master_list) { //if it does not return the related model
             $user = $request->user();
             $validatedData = $request->validate(
                 [

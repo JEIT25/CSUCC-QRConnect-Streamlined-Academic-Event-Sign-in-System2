@@ -72,7 +72,7 @@ class EventController extends Controller
         if ($event->profile_image) {
             $event->profile_image = asset("storage/$event->profile_image"); //using the asset() set profile image path to public path
         }
-        
+
         $master_list = $event->master_list()->first();
 
 

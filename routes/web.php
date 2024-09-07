@@ -21,14 +21,17 @@ Route::resource('events', EventController::class)
 //
 
 //Master List Routes
+
+Route::get('/events/{event}/master-lists/create', [MasterListController::class, 'create'])
+    ->name('master-lists.create'); //place create route before show route to avoid route conflicts
+
 Route::get('/events/{event}/master-lists/{masterlist}', [MasterListController::class, 'show'])
     ->name('master-lists.show');
 
-Route::get('/events/{event}/master-lists/create', [MasterListController::class,'create'])
-->name('master-lists.create');
-
 Route::post('/events/{event}/master-lists', [MasterListController::class, 'store'])
     ->name('master-lists.store');
+
+
 //
 
 //Log In Routes

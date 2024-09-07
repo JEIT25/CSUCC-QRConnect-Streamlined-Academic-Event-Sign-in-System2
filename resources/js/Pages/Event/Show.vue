@@ -41,7 +41,6 @@
                 <Link :href="`/events/${event.id}/export`" class="btn-primary" as="button" method="get">
                 Export Attendance
                 </Link>
-                <div>
                     <Link v-if="props.master_list" :href="`/events/${event.id}/master-lists/${props.master_list.id}`"
                         class="btn-primary" as="button" method="get">
                     Show MasterList
@@ -50,7 +49,6 @@
                         method="get">
                     Create MasterList
                     </Link>
-                </div>
                 <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
                 Edit
                 </Link>

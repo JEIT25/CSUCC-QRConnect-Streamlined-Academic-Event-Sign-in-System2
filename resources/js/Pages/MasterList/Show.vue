@@ -1,6 +1,6 @@
 <template>
     <div>
-        props.master_list.name
+        {{props.master_list.name}}
     </div>
 </template>
 

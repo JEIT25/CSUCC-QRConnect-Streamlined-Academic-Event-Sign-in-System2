@@ -17,6 +17,6 @@ const form = useForm({
 })
 
 const submitForm = () => {
-    form.post(`/events/${props.event.id}/master-list`)
+    form.post(`/events/${props.event.id}/master-lists`)
 }
 </script>
