@@ -12,7 +12,6 @@ class EventController extends Controller
      */
     public function index()
     {
-        dd(Event::all());
         return inertia(
             'Event/Index',
             [
@@ -36,6 +35,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user(); //get current user that inside request
         // Validate incoming request data
         $validatedData = $request->validate([
             'name' => 'required',
@@ -57,7 +57,8 @@ class EventController extends Controller
         }
 
         // Create a new Event with the validated data
-        Event::create($validatedData);
+        $user->events()->create($validatedData);
+
         return redirect()->route('events.index')
             ->with('success', 'SUCCESS!');
     }
@@ -71,10 +72,15 @@ class EventController extends Controller
         if ($event->profile_image) {
             $event->profile_image = asset("storage/$event->profile_image"); //using the asset() set profile image path to public path
         }
+        
+        $master_list = $event->master_list()->first();
+
+
         return inertia(
             'Event/Show',
             [
                 'event' => $event,
+                'master_list' => $master_list
             ]
         );
     }

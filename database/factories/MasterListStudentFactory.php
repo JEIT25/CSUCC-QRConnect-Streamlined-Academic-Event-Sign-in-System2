@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MasterListStudent>
  */
-class EventFactory extends Factory
+class MasterListStudentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            'start_date' => $this->faker->date(),
+            //
         ];
     }
 }

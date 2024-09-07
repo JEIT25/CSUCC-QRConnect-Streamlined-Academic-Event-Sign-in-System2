@@ -3,12 +3,12 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-    server: {
-        host: '0.0.0.0', // This binds the server to all network interfaces.
-        hmr: {
-            host: '192.168.1.13', // Use your computer's local IP address
-        }
-    },
+    // server: {
+    //     host: '0.0.0.0', // This binds the server to all network interfaces.
+    //     hmr: {
+    //         host: '192.168.116.231', // Use your computer's local IP address
+    //     }
+    // },
     plugins: [
         laravel(['resources/js/app.js']),
         vue({

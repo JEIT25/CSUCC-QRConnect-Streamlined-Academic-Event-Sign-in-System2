@@ -5,7 +5,7 @@
                 <div class="container mx-auto flex items-center justify-between p-4">
                     <!-- Left-aligned logo and brand name -->
                     <Link class="text-yellow-500 font-bold text-xl flex items-center" href="/">
-                    <img :src="props.logoUrl" alt="Logo" width="30" height="24" class="mr-2">
+                    <img :src="page.props.logoUrl" alt="Logo" width="30" height="24" class="mr-2">
                     CSUCC QRConnect
                     </Link>
                     <!-- Right-aligned navigation links -->
@@ -28,9 +28,21 @@
                                 Create an event
                                 </Link>
                             </li>
+                            <li v-if="page.props.user">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="#">
+                                {{ page.props.user.type }}
+                                {{ page.props.user.fname }}
+                                {{ page.props.user.lname }}
+                                </Link>
+                            </li>
                             <li>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="">
+                                <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200"
+                                    href="/login">
                                 Log in
+                                </Link>
+                                <Link v-else class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
+                                    method="delete">
+                                Log out
                                 </Link>
                             </li>
                         </ul>
@@ -64,8 +76,13 @@
                             </Link>
                         </li>
                         <li>
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="">
-                            Log in as admin
+                            <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200" href="/login">
+                            Log in
+                            </Link>
+                            <Link v-else class="text-yellow-400 hover:text-yellow-200" href="#">
+                            {{ page.props.user.type }}
+                            {{ page.props.user.fname }}
+                            {{ page.props.user.lname }}
                             </Link>
                         </li>
                     </ul>
@@ -77,6 +94,10 @@
             <div class="mb-4 border round-md shadow-md border-green-200 bg-green-100 p-2 text-center text-black-100 font-semibold"
                 v-if="successMess">
                 {{ successMess }}
+            </div>
+            <div class="mb-4 border round-md shadow-md border-red-200 bg-red-100 p-2 text-center text-black-100 font-semibold"
+                v-if="failedMess">
+                {{ failedMess }}
             </div>
             <slot></slot>
         </main>
@@ -93,10 +114,8 @@ import { usePage } from '@inertiajs/vue3'
 
 const page = usePage()
 const menuOpen = ref(false);
-const props = defineProps({
-    logoUrl: String,
-})
 const successMess = computed(() => page.props.messages.success)
+const failedMess = computed(() => page.props.messages.failed)
 const toggleMenu = () => {
     menuOpen.value = !menuOpen.value;
 };

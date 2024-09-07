@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('code')->nullable();
             $table->string('name');
             $table->longText('description')->nullable();
@@ -21,6 +22,8 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
             $table->boolean('is_restricted')->default(false);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

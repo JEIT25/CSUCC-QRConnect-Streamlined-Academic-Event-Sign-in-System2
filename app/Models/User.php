@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,9 +13,19 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function events() : HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
     public function master_lists():HasMany
     {
         return $this->hasMany(MasterList::class);
+    }
+
+        public function master_list_students () : BelongsToMany
+    {
+        return $this->BelongsToMany(MasterListStudent::class);
     }
 
     /**
@@ -23,6 +34,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',

@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Event;
 use Illuminate\Database\Seeder;
+use App\Models\MasterList;
+use App\Models\MasterListStudent;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,8 +19,54 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
+            'type' => 'facilitator',
             'email' => 'test@example.com',
         ]);
+
+        // User::factory()->create([
+        //     'name' => 'Test User 2',
+        //     'email' => 'test2@example.com',
+        // ]);
+
+        // Event::factory()->create(
+        //     [
+        //         'id' => 1,
+        //         'user_id' => 1,
+        //         'code' => 'test1',
+        //         'name' => 'test1',
+        //         'description' => 'test1',
+        //         'location' => 'test1',
+        //         'profile_image' => 'test1',
+        //         'is_restricted' => true
+        //     ]
+        // );
+
+        // Event::factory()->create(
+        //     [
+        //         'id' => 2,
+        //         'user_id' => 2,
+        //         'code' => 'test2',
+        //         'name' => 'test2',
+        //         'description' => 'test2',
+        //         'location' => 'test2',
+        //         'profile_image' => 'test2',
+        //         'is_restricted' => true
+        //     ]
+        // );
+
+        // MasterList::factory()->create(
+        //     [
+        //         'user_id' => 1,
+        //        'event_id' => 1,
+        //        'name' => "Test class attendance masterlist"
+        //     ]
+        // );
+
+        // MasterListStudent::factory()->create(
+        //     [
+        //         'user_id' => 2,
+        //         'master_list_id' => 1,
+        //     ]
+        // );
     }
 }

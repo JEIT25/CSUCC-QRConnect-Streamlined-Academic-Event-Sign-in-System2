@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('master_lists', function (Blueprint $table) {
+        Schema::create('master_list_students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('master_list_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('event_id');
             $table->timestamps();
 
-
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('master_list_id')->references('id')->on('master_lists')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('events')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('master_lists');
+        Schema::dropIfExists('master_list_students');
     }
 };

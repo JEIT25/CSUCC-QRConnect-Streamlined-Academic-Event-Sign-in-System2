@@ -40,8 +40,15 @@ class HandleInertiaRequests extends Middleware
             'qrBackground' => asset('assets/images/backgrounds/qr-gif.gif'),
             'coloredBackgroundImage' => asset('assets/images/backgrounds/welcome-bg.png'),
             'messages' => [
-                'success' => $request->session()->get('success')
-            ]
+                'success' => $request->session()->get('success'), //get if success exist in session and pass to templates
+                'failed' => $request->session()->get('failed'),//get if failed exist in session and pass to templates
+            ],
+            'user' => $request->user() ? [ //ternary conditional values
+                'id' => $request->user()->id, //if authenticated user return and included values id,fname,lname,type
+                'fname' => $request->user()->fname,
+                'lname' => $request->user()->lname,
+                'type' => $request->user()->type,
+            ] : null //else if false , return null value, user is null not authenticated
         ]);
     }
 }

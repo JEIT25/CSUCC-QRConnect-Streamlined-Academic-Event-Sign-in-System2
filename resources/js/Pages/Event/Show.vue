@@ -41,12 +41,16 @@
                 <Link :href="`/events/${event.id}/export`" class="btn-primary" as="button" method="get">
                 Export Attendance
                 </Link>
-                <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
-                Add MasterList
-                </Link>
-                <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
-                View MasterList
-                </Link>
+                <div>
+                    <Link v-if="props.master_list" :href="`/events/${event.id}/master-lists/${props.master_list.id}`"
+                        class="btn-primary" as="button" method="get">
+                    Show MasterList
+                    </Link>
+                    <Link v-else :href="`/events/${event.id}/master-lists/create`" class="btn-primary" as="button"
+                        method="get">
+                    Create MasterList
+                    </Link>
+                </div>
                 <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
                 Edit
                 </Link>
@@ -61,8 +65,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 
-defineProps({
-    event: Object
+const props = defineProps({
+    event: Object,
+    master_list: Object
 });
 </script>
-
