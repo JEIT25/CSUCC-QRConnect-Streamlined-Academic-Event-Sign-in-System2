@@ -15,7 +15,8 @@ class EventController extends Controller
         return inertia(
             'Event/Index',
             [
-                'events' => Event::where("is_restricted","=","false")->latest()->get()
+                // 'events' => Event::where("is_restricted","=","false")->latest()->get()
+                'events' => Event::latest()->get()
             ]
         );
     }

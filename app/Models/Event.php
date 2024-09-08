@@ -20,6 +20,7 @@ class Event extends Model
     {
         return $this->hasOne(MasterList::class);
     }
+    
 
     protected $fillable = [
         'code',

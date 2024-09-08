@@ -23,9 +23,9 @@ class User extends Authenticatable
         return $this->hasMany(MasterList::class);
     }
 
-        public function master_list_students () : BelongsToMany
+        public function master_list_students () : HasMany
     {
-        return $this->BelongsToMany(MasterListStudent::class);
+        return $this->HasMany(MasterListStudent::class);
     }
 
     /**
