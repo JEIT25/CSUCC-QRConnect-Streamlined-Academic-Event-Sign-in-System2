@@ -41,7 +41,7 @@
                                 </Link>
                             </li>
                             <li v-if="!page.props.user">
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/login">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/students/login">
                                 Student
                                 </Link>
                             </li>
@@ -71,12 +71,6 @@
                 <div :class="{ 'hidden': !menuOpen, 'block': menuOpen }" class="lg:hidden">
                     <ul class="flex flex-col items-center space-y-4 py-4">
                         <li>
-                            <Link class="text-yellow-400 hover:text-yellow-200" aria-current="page"
-                                href="{{ route('attendees.create') }}">
-                            Generate QR Code
-                            </Link>
-                        </li>
-                        <li>
                             <Link class="text-yellow-400 hover:text-yellow-200" href="/events">
                             Events
                             </Link>
@@ -103,7 +97,7 @@
                             </Link>
                         </li>
                         <li v-if="!page.props.user">
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/login">
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/students/login">
                             Student
                             </Link>
                         </li>

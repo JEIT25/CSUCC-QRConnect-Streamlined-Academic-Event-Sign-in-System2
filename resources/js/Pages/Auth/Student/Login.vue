@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h1 class="text-2xl font-bold mb-6 text-center">Facilitator Login</h1>
+        <h1 class="text-2xl font-bold mb-6 text-center">Student Login</h1>
         <form @submit.prevent="submit" class="space-y-4">
             <div class="flex flex-col">
                 <label for="email" class="text-sm font-medium text-gray-700">Email</label>
@@ -18,8 +18,8 @@
                 class="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Log In
             </button>
-            <Link href="/facilitators/create" class="text-blue-500 hover:underline text-center">
-            <p class="mt-5">Create Facilitator Account</p>
+            <Link href="/students/create" class="text-blue-500 hover:underline text-center">
+            <p class="mt-5">Create Student Account</p>
             </Link>
         </form>
     </div>
