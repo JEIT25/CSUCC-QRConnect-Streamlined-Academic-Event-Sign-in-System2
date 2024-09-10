@@ -20,7 +20,13 @@ class Event extends Model
     {
         return $this->hasOne(MasterList::class);
     }
-    
+
+    public function attendees()
+    {
+        return $this->hasMany(Attendee::class);
+    }
+
+
 
     protected $fillable = [
         'code',

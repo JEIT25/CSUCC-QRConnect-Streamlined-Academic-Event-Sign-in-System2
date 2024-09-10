@@ -13,6 +13,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function eventsAttended()
+    {
+        return $this->hasMany(Attendee::class, 'attendee_id');
+    }
+
+
     public function events() : HasMany
     {
         return $this->hasMany(Event::class);
@@ -34,12 +40,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
-        'name',
+        'type',
+        'lname',
+        'fname',
+        'school_id_number',
+        'birth_date',
         'email',
         'password',
+        'program',
+        'valid_id',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *

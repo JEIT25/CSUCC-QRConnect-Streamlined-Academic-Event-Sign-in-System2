@@ -23,11 +23,6 @@
                                 </Link>
                             </li>
 
-                            <li>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/events/create">
-                                Create an event
-                                </Link>
-                            </li>
                             <li v-if="page.props.user">
                                 <Link class="text-yellow-400 hover:text-yellow-200" href="#">
                                 {{ page.props.user.type }}
@@ -35,12 +30,28 @@
                                 {{ page.props.user.lname }}
                                 </Link>
                             </li>
-                            <li>
+                            <li v-else>
                                 <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200"
                                     href="/login">
-                                Log in
+                                Guest
                                 </Link>
                                 <Link v-else class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
+                                    method="delete">
+                                Log out
+                                </Link>
+                            </li>
+                            <li v-if="!page.props.user">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/login">
+                                Student
+                                </Link>
+                            </li>
+                            <li v-if="!page.props.user">
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/facilitators/login">
+                                Facilitator
+                                </Link>
+                            </li>
+                            <li v-else>
+                                <Link class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
                                     method="delete">
                                 Log out
                                 </Link>
@@ -75,14 +86,36 @@
                             Create an event
                             </Link>
                         </li>
-                        <li>
-                            <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200" href="/login">
-                            Log in
-                            </Link>
-                            <Link v-else class="text-yellow-400 hover:text-yellow-200" href="#">
+                        <li v-if="page.props.user">
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="#">
                             {{ page.props.user.type }}
                             {{ page.props.user.fname }}
                             {{ page.props.user.lname }}
+                            </Link>
+                        </li>
+                        <li v-else>
+                            <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200" href="/login">
+                            Guest
+                            </Link>
+                            <Link v-else class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
+                                method="delete">
+                            Log out
+                            </Link>
+                        </li>
+                        <li v-if="!page.props.user">
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/login">
+                            Student
+                            </Link>
+                        </li>
+                        <li v-if="!page.props.user">
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/facilitators/login">
+                            Facilitator
+                            </Link>
+                        </li>
+                        <li v-else>
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
+                                method="delete">
+                            Log out
                             </Link>
                         </li>
                     </ul>

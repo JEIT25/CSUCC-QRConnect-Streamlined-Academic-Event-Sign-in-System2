@@ -29,7 +29,9 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate(); //regenerate session id each time log in is successful
-        return redirect()->intended(route('events.index'));
+        if ($request->user()->type == "facilitator") {
+            return redirect()->intended(route('homepage'))->with('success', "Log In Success!");
+        }
     }
 
         public function destroy(Request $request)
