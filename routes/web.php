@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MasterListStudentController;
 use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\QrScannerController;
 use Illuminate\Support\Facades\Route;
@@ -57,15 +58,16 @@ Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->n
 // Route::resource('events', AttendeeController::class)
 // ->only('index');
 
-//Master List Routes
-Route::get('/events/{event}/master-lists/create', [MasterListController::class, 'create'])
-    ->name('master-lists.create'); //place create route before show route to avoid route conflicts
+//Master List with Master List Student Routes
 
 Route::get('/events/{event}/master-lists/{masterlist}', [MasterListController::class, 'show'])
     ->name('master-lists.show');
 
 Route::post('/events/{event}/master-lists', [MasterListController::class, 'store'])
     ->name('master-lists.store');
+
+Route::post('/events/{event}/master-lists/{masterlist}/add-students', [MasterListStudentController::class, 'store'])
+    ->name('master-lists.add.students');
 //
 
 //QR scanner route
@@ -74,6 +76,12 @@ route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class,'che
 
 route::post('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkinPost'])
     ->name('qrscanner.checkin.post');
+
+route::get('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkout'])
+    ->name('qrscanner.checkout.get');
+
+route::post('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkoutPost'])
+    ->name('qrscanner.checkout.post');
 //
 //QR Generator Routes
 route::get('qr-generator/result/{user}',[QrCodeGeneratorController::class,'show'])

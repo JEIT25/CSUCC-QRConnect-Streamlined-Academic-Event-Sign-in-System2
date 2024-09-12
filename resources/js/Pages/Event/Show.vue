@@ -32,7 +32,7 @@
                 <Link :href="`/events/${event.id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
                 Check-In
                 </Link>
-                <Link :href="`/events/${event.id}/check-out`" class="btn-primary" as="button" method="get">
+                <Link :href="`/events/${event.id}/qrscanner/checkout`" class="btn-primary" as="button" method="get">
                 Check-Out
                 </Link>
                 <Link :href="`/events/${event.id}/attendees`" class="btn-primary" as="button" method="get">
@@ -41,14 +41,13 @@
                 <Link :href="`/events/${event.id}/export`" class="btn-primary" as="button" method="get">
                 Export Attendance
                 </Link>
-                    <Link v-if="props.master_list" :href="`/events/${event.id}/master-lists/${props.master_list.id}`"
-                        class="btn-primary" as="button" method="get">
-                    Show MasterList
-                    </Link>
-                    <Link v-else :href="`/events/${event.id}/master-lists/create`" class="btn-primary" as="button"
-                        method="get">
+                <Link v-if="props.master_list" :href="`/events/${event.id}/master-lists/${props.master_list.id}`"
+                    class="btn-primary" as="button" method="get">
+                Show MasterList
+                </Link>
+                <button v-else v-on:click="createMasterList" class="btn-primary">
                     Create MasterList
-                    </Link>
+                </button>
                 <Link :href="`/events/${event.id}/edit`" class="btn-primary" as="button" method="get">
                 Edit
                 </Link>
@@ -61,10 +60,17 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     event: Object,
     master_list: Object
 });
+
+const form = useForm({})
+
+const createMasterList = () => { //this will submit to masterlist store post route and backend will auto create masterlist
+    form.post(`/events/${props.event.id}/master-lists`)
+};
+
 </script>

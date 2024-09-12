@@ -3,7 +3,7 @@
         <!-- Left side: QR scanner -->
         <div class="md:w-1/2 flex justify-center items-center border-r-4 border-blue-500 p-4">
             <div class="flex flex-col items-center">
-                <h2 class="text-2xl font-bold mb-4 text-center">Attendance Check In for Event {{ props.event.name }}
+                <h2 class="text-2xl font-bold mb-4 text-center">Attendance Check Out for Event {{ props.event.name }}
                 </h2>
                 <div id="reader" class="w-full max-w-md h-64 bg-gray-200"></div>
             </div>
@@ -17,16 +17,16 @@
                 <div v-if="attendee" class="mt-4 bg-white p-4 rounded-lg shadow-md">
                     <div class="text-center">
                         <h5 class="text-lg font-semibold mb-2">Attendee Information</h5>
-                        <h1 :class="status ? 'bg-green-500' : 'bg-red-500'" v-if="message">
+                        <h1 :class="status ? 'bg-green-500' : 'bg-red-500' " v-if="message">
                             {{ message }}
                         </h1>
                         <p><strong>Name:</strong> {{ attendee.fname }} {{ attendee.lname }}</p>
                         <p><strong>Course:</strong> {{ attendee.course }} {{ attendee.lname }}</p>
                         <p><strong>Email:</strong> {{ attendee.email }}</p>
-                        <p v-if="attendee.checkin"><strong>Check-in Time:</strong> {{
-                            convertToLocalDateTime(attendee.checkin) }}</p>
-                        <p v-else="checkin"><strong>Check-in Time:</strong> {{
-                            convertToLocalDateTime(checkin) }}</p>
+                        <p v-if="attendee.checkin"><strong>Check-out Time:</strong> {{
+                            convertToLocalDateTime(attendee.checkout) }}</p>
+                        <p v-else="checkin"><strong>Check-out Time:</strong> {{
+                            convertToLocalDateTime(checkout) }}</p>
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@ const scannerEnabled = ref(true);
 const attendee = ref(null); // This will hold the attendee info
 const message = ref(null)
 const status = ref(null);
-const checkin = ref(null) //incase existing attendee this will be set with checkin datetime value of existing attendee
+const checkout = ref(null) //incase existing attendee this will be set with checkin datetime value of existing attendee
 const props = defineProps({
     event: Object
 })
@@ -81,14 +81,14 @@ onMounted(() => {
         document.getElementById('successSound').play();
 
         // Send the scanned QR data to the backend
-        axios.post(`/events/${props.event.id}/qrscanner/checkin`, {
+        axios.post(`/events/${props.event.id}/qrscanner/checkout`, {
             qrData: qrCodeMessage,
         })
             .then(response => {
                 // Update the attendee information
                 attendee.value = response.data.attendee;
                 message.value = response.data.message
-                checkin.value = response.data.check_in
+                checkout.value = response.data.check_out
                 status.value = response.data.status
             })
             .catch(error => {
@@ -99,13 +99,14 @@ onMounted(() => {
         scannerEnabled.value = false;
         setTimeout(() => {
             scannerEnabled.value = true;
-        }, 1000);
+        }, 100);
     };
 
     const onScanError = (errorMessage) => {
         console.log(errorMessage);
     };
 
+    //ADD CODE LATER TO HANDLE THE IDLE CAMERA TO TURN OFF FOR MEMORY EFFICIENCY
     const html5QrcodeScanner = new Html5QrcodeScanner('reader', {
         fps: 50,
         qrbox: 250,
