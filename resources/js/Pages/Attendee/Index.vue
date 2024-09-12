@@ -12,11 +12,11 @@
                         <th class="py-3 px-6 text-left">Check-out</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 text-sm">
+                <tbody class="text-gray-600 text-sm text-start">
                     <tr v-for="attendee in attendees" :key="attendee.id"
                         class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-3 px-6">{{ attendee.fname }} {{ attendee.lname }}</td>
-                        <td class="py-3 px-6">{{ attendee.email }}</td>
+                        <td class="py-3 px-6">{{ attendee.user.fname }} {{ attendee.user.lname }}</td>
+                        <td class="py-3 px-6">{{ attendee.user.email }}</td>
                         <td class="py-3 px-6">{{ attendee.check_in ? new Date(attendee.check_in).toLocaleTimeString() :
                             'Not Checked-in' }}</td>
                         <td class="py-3 px-6">{{ attendee.check_out ? new Date(attendee.check_out).toLocaleTimeString()

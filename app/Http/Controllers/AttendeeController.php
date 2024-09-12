@@ -17,7 +17,7 @@ class AttendeeController extends Controller
 
         return inertia('Attendee/Index', [
             'event' => $event,
-            'attendees' => $attendees
+            'attendees' => $attendees->load('user') //load each related user for each attendee
         ]);
     }
 
