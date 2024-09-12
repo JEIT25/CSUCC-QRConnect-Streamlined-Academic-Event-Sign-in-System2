@@ -17,7 +17,7 @@ class Attendee extends Model
     ];
 
     // Relationship with User model (attendee)
-    public function attendee()
+    public function user()
     {
         return $this->belongsTo(User::class, 'attendee_id');
     }

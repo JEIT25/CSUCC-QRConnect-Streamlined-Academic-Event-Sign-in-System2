@@ -29,13 +29,13 @@
 
             <!-- Action Buttons -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                <Link :href="`/events/${event.id}/check-in`" class="btn-primary" as="button" method="get">
+                <Link :href="`/events/${event.id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
                 Check-In
                 </Link>
                 <Link :href="`/events/${event.id}/check-out`" class="btn-primary" as="button" method="get">
                 Check-Out
                 </Link>
-                <Link :href="`/events/${event.id}/attendance`" class="btn-primary" as="button" method="get">
+                <Link :href="`/events/${event.id}/attendees`" class="btn-primary" as="button" method="get">
                 View Attendance List
                 </Link>
                 <Link :href="`/events/${event.id}/export`" class="btn-primary" as="button" method="get">

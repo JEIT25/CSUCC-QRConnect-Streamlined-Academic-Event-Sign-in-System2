@@ -1,6 +1,8 @@
 <?php
+use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QrCodeGeneratorController;
+use App\Http\Controllers\QrScannerController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\EventController;
@@ -50,6 +52,11 @@ Route::resource('facilitators', FacilitatorController::class)
 ->only('create','show','store');
 //
 
+//Attendee routes
+Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
+// Route::resource('events', AttendeeController::class)
+// ->only('index');
+
 //Master List Routes
 Route::get('/events/{event}/master-lists/create', [MasterListController::class, 'create'])
     ->name('master-lists.create'); //place create route before show route to avoid route conflicts
@@ -62,10 +69,12 @@ Route::post('/events/{event}/master-lists', [MasterListController::class, 'store
 //
 
 //QR scanner route
-route::get('/events/{event}/qrscanner/checkin', function () {
-    return inertia('QrScanner/Checkin');
-});
+route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class,'checkin'])
+->name('qrscanner.checkin.get');
 
+route::post('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkinPost'])
+    ->name('qrscanner.checkin.post');
+//
 //QR Generator Routes
 route::get('qr-generator/result/{user}',[QrCodeGeneratorController::class,'show'])
 ->name('qr-generator.show');

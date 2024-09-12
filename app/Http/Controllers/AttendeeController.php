@@ -7,13 +7,65 @@ use Illuminate\Http\Request;
 
 class AttendeeController extends Controller
 {
-    // public function index(Request $request,Event $event)
-    // {
-    //     // Retrieve all attendees associated with the event_attendee records for the specified event_id
-    //     $attendees = Attendee::whereHas('eventAttendees', function ($query) use ($request) {
-    //         $query->where('event_id', $request->query('event_id'));
-    //     })->with('eventAttendees')->get();
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Event $event)
+    {
+        // Fetch the attendees of the event
+        $attendees = $event->attendees()->get();
 
-    //     return view('event-attendees.index', ['attendees' => $attendees]);
-    // }
+        return inertia('Attendee/Index', [
+            'event' => $event,
+            'attendees' => $attendees
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }
