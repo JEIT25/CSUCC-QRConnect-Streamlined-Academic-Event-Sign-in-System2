@@ -28,7 +28,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+            <div v-if="props.user.type =='facilitator'" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                 <Link :href="`/events/${event.id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
                 Check-In
                 </Link>
@@ -64,7 +64,8 @@ import { Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     event: Object,
-    master_list: Object
+    master_list: Object,
+    user: Object
 });
 
 const form = useForm({})

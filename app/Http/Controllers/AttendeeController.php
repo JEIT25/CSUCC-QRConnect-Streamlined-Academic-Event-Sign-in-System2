@@ -11,10 +11,15 @@ class AttendeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Event $event)
+    public function index(Event $event,Request $request)
     {
         // Fetch the attendees of the event
         $attendees = $event->attendees()->get();
+
+        if ($request->user()->cannot('viewAny',[Attendee::class,$event])) { //use policy to check if user can viewa attendance records,
+        //also passed the event so that only owner of event can see all attendance records of this event
+            abort(403);
+        }
 
         return inertia('Attendee/Index', [
             'event' => $event,

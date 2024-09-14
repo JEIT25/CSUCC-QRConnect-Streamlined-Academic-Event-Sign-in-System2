@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 class MasterListController extends Controller
 {
 
-    public function show(Event $event, MasterList $master_list)
+    public function show(Event $event, MasterList $master_list,Request $request)
     {
+        if ($request->user()->cannot('view', [Masterlist::class, $master_list])) { //check if user can create masterlist for this event
+            abort(403); //only owner of master_list can view the masterlist
+        }
         // dd($event->master_list->master_list_students()->with('user')->get());
         return inertia(
             "MasterList/Show",
@@ -25,6 +28,9 @@ class MasterListController extends Controller
 
     public function store(Request $request, Event $event) //define Event class to recieve the EVent instance that contains the current event
     {
+        if ($request->user()->cannot('create', [Masterlist::class,$event])) { //check if user can create masterlist for this event
+            abort(403); //only owner of event can create the masterlist
+        }
         if (!$event->master_list) { //if it does not return the related model,call it as attribute instead of invoking it as method(master_list())
             $user = $request->user();
 

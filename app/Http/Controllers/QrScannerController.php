@@ -55,8 +55,12 @@ class QrScannerController extends Controller
         ]);
     }
 
-    public function checkin(Event $event)
+    public function checkin(Event $event,Request $request)
     {
+        if ($request->user()->cannot('create', [Attendee::class, $event])) { //use policy to check if user can create attendance records,
+            //also passed the event so that only owner of event can see create attendance records
+            abort(403);
+        }
         return inertia('QrScanner/Checkin', [
             "event" => $event,
         ]);
@@ -64,6 +68,10 @@ class QrScannerController extends Controller
 
     public function checkinPost(Event $event, Request $request)
     {
+        if ($request->user()->cannot('create', [Attendee::class, $event])) { //use policy to check if user can create attendance records,
+            //also passed the event so that only owner of event can see create attendance records
+            abort(403);
+        }
         // Validate received QR data
         $validated = $request->validate([
             "qrData" => 'string|required',
@@ -97,8 +105,12 @@ class QrScannerController extends Controller
     }
 
 
-    public function checkout(Event $event)
+    public function checkout(Event $event, Request $request)
     {
+        if ($request->user()->cannot('create', [Attendee::class, $event])) { //use policy to check if user can create attendance records,
+            //also passed the event so that only owner of event can see create attendance records
+            abort(403);
+        }
         return inertia('QrScanner/Checkout', [
             "event" => $event,
         ]);
@@ -106,6 +118,10 @@ class QrScannerController extends Controller
 
     public function checkoutPost(Event $event, Request $request)
     {
+        if ($request->user()->cannot('create', [Attendee::class, $event])) { //use policy to check if user can create attendance records,
+            //also passed the event so that only owner of event can see create attendance records
+            abort(403);
+        }
         // Validate received QR data
         $validated = $request->validate([
             "qrData" => 'string|required',
