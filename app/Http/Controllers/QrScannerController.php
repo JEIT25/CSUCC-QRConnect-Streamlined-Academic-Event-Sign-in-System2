@@ -72,13 +72,13 @@ class QrScannerController extends Controller
         // Query to find student using school ID number
         $user = User::where('school_id_number', '=', $validated['qrData'])->first();
 
+
         // If user is not found, return an error
         if (!$user) {
             return response()->json(['message' => 'User not found', "status" => false]);
         }
-
         if($event->is_restricted && $user->type == "student") {
-            $student = $event->master_list->master_list_students()->find($user->id); //query if student is in master List
+            $student = $event->master_list->master_list_students()->where('user_id', '=', $user->id)->first(); //query if student is in master List student records
             if(!$student) {
                 return response()->json([
                     "message" => "Attendance Failed, student not in master list",
@@ -89,7 +89,10 @@ class QrScannerController extends Controller
         } else if(!$event->is_restricted) {
             return $this->checkInOrOut($event, $user, "check_in", "check in");
         } else {
-            return $this->checkInOrOut($event, $user, "check_in", "check in");
+            return response()->json([
+                "message" => "Attendance Failed: This event is restricted, and only participants listed in the Master List are allowed to check in",
+                "status" => false
+            ]);
         }
     }
 
@@ -114,8 +117,24 @@ class QrScannerController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not found', "status" => false]);
         }
+        if ($event->is_restricted && $user->type == "student") {
+            $student = $event->master_list->master_list_students()->where('user_id', '=', $user->id)->first(); //query if student is in master List
+            if (!$student) {
+                return response()->json([
+                    "message" => "Attendance Failed, student not in master list",
+                    "status" => false
+                ]);
+            }
+            return $this->checkInOrOut($event, $user, "check_out", "check out");
+        } else if (!$event->is_restricted) {
 
-        return $this->checkInOrOut($event, $user, "check_out", "check out");
+            return $this->checkInOrOut($event, $user, "check_out", "check out");
+        } else {
+            return response()->json([
+                "message" => "Attendance Failed: This event is restricted, and only participants listed in the Master List are allowed to check out",
+                "status" => false
+            ]);
+        }
     }
 }
 

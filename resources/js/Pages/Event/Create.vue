@@ -6,7 +6,7 @@
             <!-- Name -->
             <div class="mb-4">
                 <label for="name" class="label">Name</label>
-                <input v-model="form.name" type="text" id="name" class="input" placeholder="" />
+                <input v-model.trim="form.name" type="text" id="name" class="input" placeholder="" />
                 <div class="input-error" v-if="form.errors.name">
                     {{ form.errors.name }}
                 </div>
@@ -15,7 +15,7 @@
             <!-- Description -->
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea v-model="form.description" id="description" class="input" rows="4"></textarea>
+                <textarea v-model.trim="form.description" id="description" class="input" rows="4"></textarea>
                 <div class="input-error" v-if="form.errors.location">
                     {{ form.errors.description }}
                 </div>
@@ -24,7 +24,7 @@
             <!-- Location -->
             <div class="mb-4">
                 <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                <input v-model="form.location" type="text" id="location" class="input"
+                <input v-model.trim="form.location" type="text" id="location" class="input"
                     placeholder="City,Baranggay,Street" />
                 <div class="input-error" v-if="form.errors.location">
                     {{ form.errors.location }}
@@ -34,7 +34,7 @@
             <!-- Start Date -->
             <div class="mb-4">
                 <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
-                <input v-model="form.start_date" type="date" id="start_date" class="input" />
+                <input v-model.trim="form.start_date" type="date" id="start_date" class="input" />
                 <div class="input-error" v-if="form.errors.start_date">
                     {{ form.errors.start_date }}
                 </div>

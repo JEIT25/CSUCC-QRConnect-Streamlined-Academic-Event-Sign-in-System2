@@ -11,22 +11,26 @@ use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\FacilitatorController;
 use App\Http\Controllers\StudentController;
 
-route::get('test', function () {
+Route::get('test', function () {
     return inertia('Index/Test', ["data" => "hi"]);
 });
 
 //Log In Routes
-route::get('facilitators/login', function () {
+Route::get('facilitators/login', function () {
     return inertia('Auth/Facilitator/Login');
 })->name('facilitators.login'); //
 
-// route::get('login', [AuthController::class, 'create'])
-//     ->name('login'); //sing in form
+Route::get('students/login', function () {
+    return inertia('Auth/Student/Login');
+});
 
-route::post('login', [AuthController::class, 'store'])
-    ->name('login'); //sign in request handler
+Route::get('login', fn () => redirect()->route('homepage')->with("failed","Unauthorized access. Please login to any user above to continue."))//redirect to homepage wtoh anauthorized message
+    ->name('login'); //sign in form
 
-route::delete('logout', [AuthController::class, 'destroy']); //log out user
+Route::post('login',[AuthController::class,'store'])
+->name('login.store');
+
+Route::delete('logout', [AuthController::class, 'destroy']); //log out user
 //
 
 //HOMEPAGE
@@ -37,53 +41,71 @@ Route::get('/', function () {
 
 //RESOURCE ROUTE FOR EVENTS,
 Route::resource('events', EventController::class)
-    ->only('index','create','store','show','destroy','edit','update');
+    ->only('index', 'create', 'store', 'show', 'destroy', 'edit', 'update')
+    ->middleware('auth');
 //
 
-//Student routes
+//Student Routes
 Route::get('/students/create', [StudentController::class, 'create']);
 Route::post('/students', [StudentController::class, 'store']);
-Route::get('students/login', function () {
-    return inertia('Auth/Student/Login');
-});
 //
 
-//Facilitator routes
+//Facilitator Routes
 Route::resource('facilitators', FacilitatorController::class)
-->only('create','show','store');
+    ->only('create', 'show', 'store');
 //
 
-//Attendee routes
-Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])->name('attendees.index');
-// Route::resource('events', AttendeeController::class)
-// ->only('index');
+//Attendee Routes
+Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])
+    ->name('attendees.index')
+    ->middleware('auth');
+;
+Route::delete('/events/{event}/attendees/{attendee}', [AttendeeController::class, 'destroy'])
+    ->name('attendees.destroy')
+    ->middleware('auth');
+;
+//
 
-//Master List with Master List Student Routes
-
-Route::get('/events/{event}/master-lists/{masterlist}', [MasterListController::class, 'show'])
-    ->name('master-lists.show');
+//Master List And Master List Student routes
+Route::get('/events/{event}/master-lists/{master_list}', [MasterListController::class, 'show'])
+    ->name('master-lists.show')
+    ->middleware('auth');
 
 Route::post('/events/{event}/master-lists', [MasterListController::class, 'store'])
-    ->name('master-lists.store');
+    ->name('master-lists.store')
+    ->middleware('auth');
+Route::delete('/events/{event}/master-lists/{master_list}', [MasterListController::class, 'destroy'])
+    ->name('master-list.destroy')
+    ->middleware('auth');
 
-Route::post('/events/{event}/master-lists/{masterlist}/add-students', [MasterListStudentController::class, 'store'])
-    ->name('master-lists.add.students');
+Route::post('master-list-students/{master_list}', [MasterListStudentController::class, 'store'])
+    ->name('master-list-students.store')
+    ->middleware('auth');
+
+Route::delete('master-list-students/{master_list_student}', [MasterListStudentController::class, 'destroy'])
+    ->name('master-list-students.destroy')
+    ->middleware('auth');
 //
 
-//QR scanner route
-route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class,'checkin'])
-->name('qrscanner.checkin.get');
+//QR scanner Routes
+Route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkin'])
+    ->name('qrscanner.checkin.get')
+    ->middleware('auth');
 
-route::post('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkinPost'])
-    ->name('qrscanner.checkin.post');
+Route::post('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkinPost'])
+    ->name('qrscanner.checkin.post')
+    ->middleware('auth');
 
-route::get('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkout'])
-    ->name('qrscanner.checkout.get');
+Route::get('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkout'])
+    ->name('qrscanner.checkout.get')
+    ->middleware('auth');
 
-route::post('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkoutPost'])
-    ->name('qrscanner.checkout.post');
+Route::post('/events/{event}/qrscanner/checkout', [QrScannerController::class, 'checkoutPost'])
+    ->name('qrscanner.checkout.post')
+    ->middleware('auth');
 //
+
 //QR Generator Routes
-route::get('qr-generator/result/{user}',[QrCodeGeneratorController::class,'show'])
-->name('qr-generator.show');
+Route::get('qr-generator/result/{user}', [QrCodeGeneratorController::class, 'show'])
+    ->name('qr-generator.show');
 //

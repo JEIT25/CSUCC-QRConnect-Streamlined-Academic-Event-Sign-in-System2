@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendee;
 use App\Models\Event;
 use Illuminate\Http\Request;
-
 class AttendeeController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -64,8 +65,11 @@ class AttendeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event , Attendee $attendee)
     {
-        //
+        $attendee->delete();
+
+        return redirect()->route('attendees.index',["event" => $event->id])
+        ->with("success","Attendee deleted successfully.");
     }
 }

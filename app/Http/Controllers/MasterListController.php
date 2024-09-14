@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class MasterListController extends Controller
 {
 
-    public function show(Event $event)
+    public function show(Event $event, MasterList $master_list)
     {
         // dd($event->master_list->master_list_students()->with('user')->get());
         return inertia(
@@ -38,13 +38,27 @@ class MasterListController extends Controller
                 "is_restricted" => true
             ]);
 
-            return redirect()->route('events.show',["event" => $event->id])->with("success", "Succesfully Created Master List");
+            return redirect()->route('events.show', ["event" => $event->id])->with("success", "Succesfully Created Master List");
         } else {
             return redirect()->route('events.show', ["event" => $event->id])->with("failed", "Master List Already Exist!");
         }
 
     }
 
+    public function destroy( Event $event,MasterList $master_list,) //define Event class to recieve the EVent instance that contains the current event
+    {
+        $event->update([
+            "is_restricted" => false
+        ]);
 
+       $master_list->delete();
+
+
+        // Redirect back with a success message
+        return redirect()->route('events.show', [
+            'event' => $event->id,
+        ])->with('success', "Master List for $event->name successfully deleted.");
+
+    }
 }
 

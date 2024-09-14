@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
-class EventController extends Controller
+class EventController extends BaseController
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    { //third way in Authorization (easiest)
+        $this->authorizeResource(Event::class, 'event');
+    }
     public function index()
     {
         return inertia(
@@ -110,14 +118,15 @@ class EventController extends Controller
             'description' => 'required',
             'location' => 'required',
             'start_date' => 'required|date',
-            'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000',  // Validate image type and size
-        ], [
-            'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp'
         ]);
-
 
         // Handle the profile image if it's present
         if ($request->hasFile('profile_image')) {
+            $validatedData = $request->validate([
+                'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000',  // Validate image type and size
+            ], [
+                'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp'
+            ]);
             // Delete the old profile image if it exists
             if ($event->profile_image) {
                 Storage::disk('public')->delete($event->profile_image);
@@ -135,7 +144,6 @@ class EventController extends Controller
         $event->update($validatedData);
         return redirect()->route('events.show', ['event' => $event->id])
             ->with('success', 'SUCCESS!');
-
     }
 
     /**

@@ -11,18 +11,6 @@
                     <!-- Right-aligned navigation links -->
                     <div class="lg:flex items-center hidden space-x-8">
                         <ul class="flex space-x-8">
-                            <li>
-                                <Link class="text-yellow-500 hover:text-yellow-200" aria-current="page"
-                                    href="{{ route('attendees.create') }}">
-                                Generate QR Code
-                                </Link>
-                            </li>
-                            <li>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/events">
-                                Events
-                                </Link>
-                            </li>
-
                             <li v-if="page.props.user">
                                 <Link class="text-yellow-400 hover:text-yellow-200" href="#">
                                 {{ page.props.user.type }}
@@ -70,16 +58,6 @@
                 <!-- Mobile menu -->
                 <div :class="{ 'hidden': !menuOpen, 'block': menuOpen }" class="lg:hidden">
                     <ul class="flex flex-col items-center space-y-4 py-4">
-                        <li>
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/events">
-                            Events
-                            </Link>
-                        </li>
-                        <li>
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/events/create">
-                            Create an event
-                            </Link>
-                        </li>
                         <li v-if="page.props.user">
                             <Link class="text-yellow-400 hover:text-yellow-200" href="#">
                             {{ page.props.user.type }}
