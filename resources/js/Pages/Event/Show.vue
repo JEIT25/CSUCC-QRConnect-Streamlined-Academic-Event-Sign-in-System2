@@ -36,6 +36,16 @@
                         <label class="text-sm font-medium text-gray-500">Type</label>
                         <p class="text-sm text-gray-500">{{ event.type }}</p>
                     </div>
+                    <!-- School Year -->
+                    <div class="mb-4" v-if="event.school_year">
+                        <label class="text-sm font-medium text-gray-500">School Year</label>
+                        <p class="text-sm text-gray-500">{{ event.school_year }}</p>
+                    </div>
+                    <!-- Semester -->
+                    <div class="mb-4" v-if="event.semester">
+                        <label class="text-sm font-medium text-gray-500">Semester</label>
+                        <p class="text-sm text-gray-500">{{ event.semester }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -126,8 +136,8 @@ const createMasterList = () => {
 const exportAttendance = () => {
     if (selectedTemplate.value) {
         // Redirect to export route with the selected template as a query parameter
-        window.location.href = `/events/${props.event.event_id}/export?template=${selectedTemplate.value}`;
+        window.location.href = `/export-attendee-records/${props.event.event_id}/${selectedTemplate.value}`;
         showExportModal.value = false; // Close the modal after submission
-    } 
+    }
 };
 </script>

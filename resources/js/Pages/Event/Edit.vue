@@ -40,6 +40,29 @@
                 </div>
             </div>
 
+            <!-- School Year-->
+            <div class="mb-4">
+                <label for="school_year" class="block text-sm font-medium text-gray-700">School Year</label>
+                <input v-model.trim="form.school_year" type="input" id="start_date" class="input" />
+                <div class="input-error" v-if="form.errors.school_year">
+                    {{ form.errors.school_year }}
+                </div>
+            </div>
+
+            <!-- Semester -->
+            <div class="mb-4">
+                <label for="semester" class="block text-sm font-medium text-gray-700">Semester</label>
+                <select v-model="form.semester" id="semester" class="input">
+                    <option value="">Select Semester</option>
+                    <option value="First">1st Semester</option>
+                    <option value="Second">2nd Semester</option>
+                    <!-- Add more semesters as needed -->
+                </select>
+                <div class="input-error" v-if="form.errors.semester">
+                    {{ form.errors.semester }}
+                </div>
+            </div>
+
             <!-- Subject -->
             <div class="mb-4">
                 <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
@@ -121,8 +144,10 @@ let form = useForm({
     description: props.event.description,
     location: props.event.location,
     start_date: props.event.start_date,
-    type: props.event.type || '', // New type attribute
-    other_type: props.event.other_type || '', // New other_type attribute
+    school_year: props.event.school_year,
+    semester: props.event.semester || '', // New semester attribute
+    type: props.event.type || '', // Existing type attribute
+    other_type: props.event.other_type || '', // Existing other_type attribute
     profile_image: null,
     _method: 'PUT' // Set as PUT since HTML only accepts POST for file upload
 })

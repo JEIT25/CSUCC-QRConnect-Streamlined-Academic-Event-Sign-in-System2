@@ -21,6 +21,8 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->string('location');
             $table->string('profile_image')->nullable();
+            $table->enum('semester', ["1st", "2nd"])->nullable();
+            $table->string('school_year')->nullable();
             $table->date('start_date');
             $table->timestamps();
 

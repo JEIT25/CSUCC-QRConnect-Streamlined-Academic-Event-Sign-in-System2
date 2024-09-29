@@ -42,5 +42,7 @@ class Event extends Model
         'start_date',
         'location',
         'subject_code',
+        'semester',
+        'school_year'
     ];
 }

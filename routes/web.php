@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AttendeeRecordController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExportAttendeeRecordController;
 use App\Http\Controllers\MasterListMemberController;
 use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\QrScannerController;
@@ -44,6 +45,10 @@ Route::resource('events', EventController::class)
     ->only('index', 'create', 'store', 'show', 'destroy', 'edit', 'update')
     ->middleware('auth');
 //
+
+//Route for exporting attendee_records based on template
+Route::get('/export-attendee-records/{event}/{template}',[ExportAttendeeRecordController::class,'ExportAttendeeRecords'])
+->name('attendee-records.export');
 
 //Facilitator Routes
 Route::resource('facilitators', FacilitatorController::class)

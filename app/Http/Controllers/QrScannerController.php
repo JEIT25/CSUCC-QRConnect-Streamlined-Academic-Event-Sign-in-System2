@@ -86,7 +86,7 @@ class QrScannerController extends Controller
         $member = MasterListMember::where('unique_id', '=', $validated['qrData'])->first();
 
         // If member is not found, return an error
-        if (!$member || $member->event_id !== $event->event_id) {
+        if (!$member || $member->master_list_id !== $event->master_list->master_list_id) {
             return response()->json(['message' => 'Person not found in Master List!', "status" => false]);
         }
 
@@ -118,7 +118,7 @@ class QrScannerController extends Controller
         $member = MasterListMember::where('unique_id', '=', $validated['qrData'])->first();
 
         // If member is not found, return an error
-        if (!$member || $member->event_id !== $event->event_id) {
+        if (!$member || $member->master_list_id !== $event->master_list->master_list_id) {
             return response()->json(['message' => 'Person not found in Master List!', "status" => false]);
         }
 

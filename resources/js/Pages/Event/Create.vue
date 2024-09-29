@@ -40,10 +40,34 @@
                 </div>
             </div>
 
+            <!-- School Year -->
+            <div class="mb-4">
+                <label for="school_year" class="block text-sm font-medium text-gray-700">School Year (Optional)</label>
+                <input v-model.trim="form.school_year" type="text" id="school_year" class="input"
+                    placeholder="e.g., 2023-2024" />
+                <div class="input-error" v-if="form.errors.school_year">
+                    {{ form.errors.school_year }}
+                </div>
+            </div>
+
+            <!-- Semester -->
+            <div class="mb-4">
+                <label for="semester" class="block text-sm font-medium text-gray-700">Semester (Optional)</label>
+                <select v-model="form.semester" id="semester" class="input">
+                    <option value="">Select Semester</option>
+                    <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                </select>
+                <div class="input-error" v-if="form.errors.semester">
+                    {{ form.errors.semester }}
+                </div>
+            </div>
+
             <!-- Type -->
             <div class="mb-4">
                 <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
                 <select v-model="form.type" id="type" class="input">
+                    <option value="">Select Event Type</option>
                     <option value="class attendance">Class Attendance</option>
                     <option value="class orientation">Class Orientation</option>
                     <option value="exam">Exam</option>
@@ -87,7 +111,7 @@
             <!-- Profile Image -->
             <div class="mb-4">
                 <label for="profile_image" class="block text-sm font-medium text-gray-700">Profile
-                    Image(Optional)</label>
+                    Image (Optional)</label>
                 <input @change="handleFileUpload" type="file" id="profile_image"
                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                 <div class="input-error" v-if="form.errors.profile_image">
@@ -116,11 +140,13 @@ const form = useForm({
     description: '',
     location: '',
     start_date: '',
+    school_year: '',  // New attribute for school year
+    semester: '',  // Default semester
     profile_image: null,
     type: 'class attendance',  // default type
     other_type: '',  // for specifying if "other" is selected
     subject: '',  // optional subject input
-    subject_code: '', //optional input
+    subject_code: '', // optional input
 })
 
 const handleFileUpload = (event) => {

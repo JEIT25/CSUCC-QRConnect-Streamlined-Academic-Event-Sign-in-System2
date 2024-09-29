@@ -46,6 +46,9 @@ class EventController extends BaseController
     {
         $user = $request->user(); // Get current user from the request
 
+        // Get the current year
+        $currentYear = date('Y');
+
         // Validate incoming request data
         $validatedData = $request->validate([
             'name' => 'required',
@@ -57,12 +60,31 @@ class EventController extends BaseController
             'other_type' => 'nullable|required_if:type,other', // 'other_type' is required only if 'type' is 'other'
             'subject' => 'nullable|string',  // Optional subject field
             'subject_code' => 'nullable|string',  // Optional subject field
+            'semester' => 'nullable|in:1st,2nd', // Adjust the enum values as needed
+            'school_year' => 'nullable|string|regex:/^\d{4}-\d{4}$/', // Validate format YYYY-YYYY
         ], [
             'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp',
             'other_type.required_if' => 'Please specify the type if "Other" is selected.',
+            'school_year.regex' => 'The school year must be in the format YYYY-YYYY.',
         ]);
 
-        // If 'type' is 'other', use the 'other_type' value instead of 'type'
+
+        if ($request->school_year) {
+            // Split the school year into start and end years
+            [$startYear, $endYear] = explode('-', $validatedData['school_year']);
+
+            // Validate that the current year is greater than or equal to the current year
+            if ((int) $startYear < $currentYear) {
+                return redirect()->back()->withErrors(['school_year' => 'The current year of the school year must be the current year or later.']);
+            }
+
+            // Validate that the end year is greater than or equal to the current year
+            if ((int) $endYear <= (int) $startYear) {
+                return redirect()->back()->withErrors(['school_year' => 'The end year of the school year must be greater than the current year.']);
+            }
+        }
+
+        // Handle 'other_type'
         if ($validatedData['type'] === 'other' && !empty($validatedData['other_type'])) {
             $validatedData['type'] = $validatedData['other_type']; // Overwrite 'type' with 'other_type'
         }
@@ -71,8 +93,6 @@ class EventController extends BaseController
         if ($request->hasFile('profile_image')) {
             $profileImage = $request->file('profile_image');
             $imagePath = $profileImage->store('images/events', 'public');  // Store the image in the 'images' directory in the 'public' disk
-
-            // Add the image path to the validated data before creating the Event
             $validatedData['profile_image'] = $imagePath;
         }
 
@@ -82,6 +102,7 @@ class EventController extends BaseController
         return redirect()->route('events.index')
             ->with('success', 'SUCCESS!');
     }
+
 
 
     /**
@@ -123,6 +144,9 @@ class EventController extends BaseController
      */
     public function update(Request $request, Event $event)
     {
+        // Get the current year
+        $currentYear = date('Y');
+
         // Validate incoming request data
         $validatedData = $request->validate([
             'name' => 'required',
@@ -133,7 +157,28 @@ class EventController extends BaseController
             'subject_code' => 'nullable|string',
             'type' => 'required', // Validate type
             'other_type' => 'nullable|string|max:255', // Validate other_type if present
+            'semester' => 'nullable|in:1st,2nd', // Adjust the enum values as needed
+            'school_year' => 'nullable|string|regex:/^\d{4}-\d{4}$/', // Validate format YYYY-YYYY
+        ], [
+            'school_year.regex' => 'The school year must be in the format YYYY-YYYY.',
         ]);
+
+        if ($request->school_year) {
+            // Split the school year into start and end years
+            [$startYear, $endYear] = explode('-', $validatedData['school_year']);
+
+            // Validate that the current year is greater than or equal to the current year
+            if ((int) $startYear < $currentYear) {
+                return redirect()->back()->withErrors(['school_year' => 'The current year of the school year must be the current year or later.']);
+            }
+
+            // Validate that the end year is greater than or equal to the current year
+            if ((int) $endYear <= (int) $startYear) {
+                return redirect()->back()->withErrors(['school_year' => 'The end year of the school year must be greater than the current year.']);
+            }
+        }
+
+
 
         // Automatically set 'type' to 'other_type' if 'other_type' is provided
         if (!empty($validatedData['other_type'])) {
@@ -142,6 +187,7 @@ class EventController extends BaseController
 
         // Handle the profile image if it's present
         if ($request->hasFile('profile_image')) {
+            // Validate the profile image
             $validatedData = array_merge($validatedData, $request->validate([
                 'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000', // Validate image type and size
             ], [
@@ -174,8 +220,8 @@ class EventController extends BaseController
      */
     public function destroy(Event $event)
     {
-        if($event->profile_image) {
-        Storage::disk('public')->delete($event->profile_image);
+        if ($event->profile_image) {
+            Storage::disk('public')->delete($event->profile_image);
         }
         $event->delete();
         return redirect()->route('events.index')
