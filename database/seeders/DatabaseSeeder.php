@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // User::factory()->create([
         //     'type' => 'facilitator',
-        //     'email' => 'test2@example.com',
+        //     'email' => 'test@example.com',
         // ]);
 
 

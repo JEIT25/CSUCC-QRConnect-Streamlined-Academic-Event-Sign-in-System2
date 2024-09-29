@@ -20,6 +20,6 @@ const form = useForm({
 })
 
 const submitForm = () => {
-    form.post('login')
+    form.post('/login')
 }
 </script>

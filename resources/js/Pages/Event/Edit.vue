@@ -25,7 +25,7 @@
             <div class="mb-4">
                 <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
                 <input v-model.trim="form.location" type="text" id="location" class="input"
-                    placeholder="City, Baranggay, Street" />
+                    placeholder="City, Barangay, Street" />
                 <div class="input-error" v-if="form.errors.location">
                     {{ form.errors.location }}
                 </div>
@@ -37,6 +37,50 @@
                 <input v-model.trim="form.start_date" type="date" id="start_date" class="input" />
                 <div class="input-error" v-if="form.errors.start_date">
                     {{ form.errors.start_date }}
+                </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="mb-4">
+                <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                <input v-model.trim="form.subject" type="text" id="subject" class="input" />
+                <div class="input-error" v-if="form.errors.subject">
+                    {{ form.errors.subject }}
+                </div>
+            </div>
+
+            <!-- Subject Code -->
+            <div class="mb-4">
+                <label for="subject_code" class="block text-sm font-medium text-gray-700">Subject Code</label>
+                <input v-model.trim="form.subject_code" type="text" id="subject_code" class="input" />
+                <div class="input-error" v-if="form.errors.subject_code">
+                    {{ form.errors.subject_code }}
+                </div>
+            </div>
+
+            <!-- Type -->
+            <div class="mb-4">
+                <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                <select v-model="form.type" id="type" class="input">
+                    <option value="">Select Type</option>
+                    <option value="class attendance">Class Attendance</option>
+                    <option value="class orientation">Class Orientation</option>
+                    <option value="exam">Exam</option>
+                    <option value="other">Other</option>
+                    <!-- Add more predefined types as needed -->
+                </select>
+                <div class="input-error" v-if="form.errors.type">
+                    {{ form.errors.type }}
+                </div>
+            </div>
+
+            <!-- Other Type -->
+            <div class="mb-4" v-if="form.type === 'other'">
+                <label for="other_type" class="block text-sm font-medium text-gray-700">Other Type</label>
+                <input v-model.trim="form.other_type" type="text" id="other_type" class="input"
+                    placeholder="Specify type" />
+                <div class="input-error" v-if="form.errors.other_type">
+                    {{ form.errors.other_type }}
                 </div>
             </div>
 
@@ -71,12 +115,16 @@ const props = defineProps({
 })
 
 let form = useForm({
+    subject: props.event.subject,
+    subject_code: props.event.subject_code,
     name: props.event.name,
     description: props.event.description,
     location: props.event.location,
     start_date: props.event.start_date,
+    type: props.event.type || '', // New type attribute
+    other_type: props.event.other_type || '', // New other_type attribute
     profile_image: null,
-    _method: 'PUT' //set as put since html only accept post for file upload(solution)
+    _method: 'PUT' // Set as PUT since HTML only accepts POST for file upload
 })
 
 const addFile = (event) => {
@@ -88,14 +136,14 @@ const isSubmitting = ref(false)
 const debouncedSubmit = debounce(() => {
     isSubmitting.value = true
     try {
-        form.post(`/events/${props.event.id}`)//submit a post request but when sent to backend it is turned into a put request
+        form.post(`/events/${props.event.event_id}`) // Submit a POST request but when sent to backend it is turned into a PUT request
         console.log('Form submitted successfully.')
     } catch (error) {
         console.error('Error submitting form:', error)
     } finally {
         isSubmitting.value = false
     }
-}, 1000) // Adjust the debounce time, limit the submit of the form to only run a few times in the time specified
+}, 1000) // Adjust the debounce time
 
 const submitForm = () => {
     debouncedSubmit()

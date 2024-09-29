@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\MasterList;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class MasterListController extends Controller
@@ -15,12 +14,12 @@ class MasterListController extends Controller
         if ($request->user()->cannot('view', [Masterlist::class, $master_list])) { //check if user can create masterlist for this event
             abort(403); //only owner of master_list can view the masterlist
         }
-        // dd($event->master_list->master_list_students()->with('user')->get());
+
         return inertia(
             "MasterList/Show",
             [
                 "master_list" => $event->master_list,
-                "master_list_students" => $event->master_list->master_list_students()->with('user')->get() ?? [], //query master_list_records along with its perspective users , if null return emty array
+                "master_list_members" => $event->master_list->master_list_members()->get() ?? [], //query master_list_records along with its perspective users , if null return emty array
             ]
         );
     }
@@ -34,19 +33,16 @@ class MasterListController extends Controller
         if (!$event->master_list) { //if it does not return the related model,call it as attribute instead of invoking it as method(master_list())
             $user = $request->user();
 
-            $event->master_list()->create([ //create event,
+            $createdMasterList = $event->master_list()->create([ //create event,
+                "event_id" => $event->event_id,
                 //no need specify event_id,since $event variable holds the current event
                 "name" => "{$event->name} Master List", // and get name from validation
-                "user_id" => $user->id, // specify user_id
+                "facilitator_id" => $user->user_id, // specify facilitator_id
             ]);
 
-            $event->update([ //set restricted to true,be used for limiting attendees to the master list
-                "is_restricted" => true
-            ]);
-
-            return redirect()->route('events.show', ["event" => $event->id])->with("success", "Succesfully Created Master List");
+            return redirect()->route('master-lists.show', ["event" => $event->event_id, "master_list" => $createdMasterList->master_list_id])->with("success", "Succesfully Created Master List");
         } else {
-            return redirect()->route('events.show', ["event" => $event->id])->with("failed", "Master List Already Exist!");
+            return redirect()->route('events.show', ["event" => $event->event_id])->with("failed", "Master List Already Exist!");
         }
 
     }
@@ -62,7 +58,7 @@ class MasterListController extends Controller
 
         // Redirect back with a success message
         return redirect()->route('events.show', [
-            'event' => $event->id,
+            'event' => $event->event_id,
         ])->with('success', "Master List for $event->name successfully deleted.");
 
     }

@@ -11,26 +11,27 @@ use \Illuminate\Database\Eloquent\Builder;
 class MasterList extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'master_list_id';  // Update this line to use user_id instead of id
 
-
-    public function user(): BelongsTo
+    public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'facilitator_id');
     }
 
-    public function event() : BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Event::class, 'event_id');
     }
 
-    public function master_list_students() : HasMany
+    public function master_list_members(): HasMany
     {
-        return $this->hasMany(MasterListStudent::class);
+        return $this->hasMany(MasterListMember::class, "master_list_id");
     }
+
 
     protected $fillable = [
         'name',
-        'user_id',
+        'facilitator_id',
         'event_id'
     ];
 }

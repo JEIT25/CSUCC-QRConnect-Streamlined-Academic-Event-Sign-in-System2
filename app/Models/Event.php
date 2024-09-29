@@ -11,30 +11,36 @@ class Event extends Model
 {
     use HasFactory;
 
-    public function user() : BelongsTo
+    protected $primaryKey = 'event_id';  // Update this line to use user_id instead of id
+
+    public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'facilitator_id');
     }
 
-    public function master_list() : HasOne
+
+    public function master_list(): HasOne
     {
-        return $this->hasOne(MasterList::class);
+        return $this->hasOne(MasterList::class, 'master_list_id');
     }
 
-    public function attendees()
+    public function attendee_records()
     {
-        return $this->hasMany(Attendee::class);
+        return $this->hasMany(AttendeeRecord::class, 'event_id');
     }
+
 
 
 
     protected $fillable = [
-        'code',
+        'facilitator_id',
+        'type',
+        'subject',
         'name',
         'description',
-        'location',
-        'start_date',
         'profile_image',
-        'is_restricted'
+        'start_date',
+        'location',
+        'subject_code',
     ];
 }

@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('master_lists', function (Blueprint $table) {
-            $table->id();
+            $table->id("master_list_id");
             $table->string('name');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('facilitator_id');
             $table->unsignedBigInteger('event_id');
             $table->timestamps();
 
 
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('event_id')->references('event_id')->on('events')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('facilitator_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

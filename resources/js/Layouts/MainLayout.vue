@@ -21,25 +21,9 @@
                             <li v-else>
                                 <Link v-if="!page.props.user" class="text-yellow-400 hover:text-yellow-200"
                                     href="/login">
-                                Guest
+                                Login
                                 </Link>
                                 <Link v-else class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
-                                    method="delete">
-                                Log out
-                                </Link>
-                            </li>
-                            <li v-if="!page.props.user">
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/students/login">
-                                Student
-                                </Link>
-                            </li>
-                            <li v-if="!page.props.user">
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/facilitators/login">
-                                Facilitator
-                                </Link>
-                            </li>
-                            <li v-else>
-                                <Link class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
                                     method="delete">
                                 Log out
                                 </Link>

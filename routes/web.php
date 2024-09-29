@@ -1,7 +1,7 @@
 <?php
-use App\Http\Controllers\AttendeeController;
+use App\Http\Controllers\AttendeeRecordController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MasterListStudentController;
+use App\Http\Controllers\MasterListMemberController;
 use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\QrScannerController;
 use Illuminate\Support\Facades\Route;
@@ -11,20 +11,20 @@ use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\FacilitatorController;
 use App\Http\Controllers\StudentController;
 
-Route::get('test', function () {
-    return inertia('Index/Test', ["data" => "hi"]);
-});
+// Route::get('test', function () {
+//     return inertia('Index/Test', ["data" => "hi"]);
+// });
 
 //Log In Routes
-Route::get('facilitators/login', function () {
-    return inertia('Auth/Facilitator/Login');
-})->name('facilitators.login'); //
+// Route::get('facilitators/login', function () {
+//     return inertia('Auth/Facilitator/Login');
+// })->name('facilitators.login'); //
 
-Route::get('students/login', function () {
-    return inertia('Auth/Student/Login');
-});
+// Route::get('students/login', function () {
+//     return inertia('Auth/Student/Login');
+// });
 
-Route::get('login', fn () => redirect()->route('homepage')->with("failed","Unauthorized access. Please login to any user above to continue."))//redirect to homepage wtoh anauthorized message
+Route::get('login', fn () => inertia('Auth/Login'))//redirect to homepage wtoh anauthorized message
     ->name('login'); //sign in form
 
 Route::post('login',[AuthController::class,'store'])
@@ -45,22 +45,17 @@ Route::resource('events', EventController::class)
     ->middleware('auth');
 //
 
-//Student Routes
-Route::get('/students/create', [StudentController::class, 'create']);
-Route::post('/students', [StudentController::class, 'store']);
-//
-
 //Facilitator Routes
 Route::resource('facilitators', FacilitatorController::class)
     ->only('create', 'show', 'store');
 //
 
 //Attendee Routes
-Route::get('/events/{event}/attendees', [AttendeeController::class, 'index'])
+Route::get('/events/{event}/attendees', [AttendeeRecordController::class, 'index'])
     ->name('attendees.index')
     ->middleware('auth');
 ;
-Route::delete('/events/{event}/attendees/{attendee}', [AttendeeController::class, 'destroy'])
+Route::delete('/events/{event}/attendees/{attendee}', [AttendeeRecordController::class, 'destroy'])
     ->name('attendees.destroy')
     ->middleware('auth');
 ;
@@ -78,12 +73,12 @@ Route::delete('/events/{event}/master-lists/{master_list}', [MasterListControlle
     ->name('master-list.destroy')
     ->middleware('auth');
 
-Route::post('master-list-students/{master_list}', [MasterListStudentController::class, 'store'])
-    ->name('master-list-students.store')
+Route::post('master-list-members/{master_list}', [MasterListMemberController::class, 'store'])
+    ->name('master-list-members.store')
     ->middleware('auth');
 
-Route::delete('master-list-students/{master_list_student}', [MasterListStudentController::class, 'destroy'])
-    ->name('master-list-students.destroy')
+Route::delete('master-list-members/{master_list_member}', [MasterListMemberController::class, 'destroy'])
+    ->name('master-list-members.destroy')
     ->middleware('auth');
 //
 

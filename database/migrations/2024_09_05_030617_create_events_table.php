@@ -12,18 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('code')->nullable();
+            $table->id("event_id");
+            $table->unsignedBigInteger('facilitator_id');
+            $table->string('type');
+            $table->string('subject')->nullable();
+            $table->string('subject_code')->nullable();
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->string('location')->nullable();
-            $table->date('start_date');
+            $table->string('location');
             $table->string('profile_image')->nullable();
-            $table->boolean('is_restricted')->default(false);
+            $table->date('start_date');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('facilitator_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

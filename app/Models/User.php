@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,26 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    public function eventsAttended()
-    {
-        return $this->hasMany(Attendee::class, 'attendee_id');
-    }
-
-
-    public function events() : HasMany
-    {
-        return $this->hasMany(Event::class);
-    }
-
-    public function master_lists():HasMany
-    {
-        return $this->hasMany(MasterList::class);
-    }
-
-        public function master_list_students () : HasMany
-    {
-        return $this->HasMany(MasterListStudent::class);
-    }
+    // Define custom primary key
+    protected $primaryKey = 'user_id'; // Update this line to use user_id instead of id
 
     /**
      * The attributes that are mass assignable.
@@ -43,13 +23,14 @@ class User extends Authenticatable
         'type',
         'lname',
         'fname',
-        'school_id_number',
+        'middle_initial',
+        'extension',
         'birth_date',
         'email',
         'password',
-        'program',
-        'valid_id',
+        'status'
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -72,4 +53,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class, 'facilitator_id');
+    }
+
+    public function master_lists(): HasMany
+    {
+        return $this->hasMany(MasterList::class, 'master_list_id');
+    }
+
 }

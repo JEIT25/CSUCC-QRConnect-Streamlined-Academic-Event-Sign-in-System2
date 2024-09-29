@@ -44,17 +44,28 @@ class EventController extends BaseController
      */
     public function store(Request $request)
     {
-        $user = $request->user(); //get current user that inside request
+        $user = $request->user(); // Get current user from the request
+
         // Validate incoming request data
         $validatedData = $request->validate([
             'name' => 'required',
             'description' => 'required',
             'location' => 'required',
             'start_date' => 'required|date',
-            'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000'  // Validate image type and size
+            'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000', // Validate image type and size
+            'type' => 'required',  // 'type' field is required
+            'other_type' => 'nullable|required_if:type,other', // 'other_type' is required only if 'type' is 'other'
+            'subject' => 'nullable|string',  // Optional subject field
+            'subject_code' => 'nullable|string',  // Optional subject field
         ], [
-            'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp'
+            'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp',
+            'other_type.required_if' => 'Please specify the type if "Other" is selected.',
         ]);
+
+        // If 'type' is 'other', use the 'other_type' value instead of 'type'
+        if ($validatedData['type'] === 'other' && !empty($validatedData['other_type'])) {
+            $validatedData['type'] = $validatedData['other_type']; // Overwrite 'type' with 'other_type'
+        }
 
         // Handle the profile image if it's present
         if ($request->hasFile('profile_image')) {
@@ -118,15 +129,25 @@ class EventController extends BaseController
             'description' => 'required',
             'location' => 'required',
             'start_date' => 'required|date',
+            'subject' => 'nullable|string',
+            'subject_code' => 'nullable|string',
+            'type' => 'required', // Validate type
+            'other_type' => 'nullable|string|max:255', // Validate other_type if present
         ]);
+
+        // Automatically set 'type' to 'other_type' if 'other_type' is provided
+        if (!empty($validatedData['other_type'])) {
+            $validatedData['type'] = $validatedData['other_type'];
+        }
 
         // Handle the profile image if it's present
         if ($request->hasFile('profile_image')) {
-            $validatedData = $request->validate([
-                'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000',  // Validate image type and size
+            $validatedData = array_merge($validatedData, $request->validate([
+                'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000', // Validate image type and size
             ], [
                 'profile_image.mimes' => 'The file should be in one of the formats: jpg, png, jpeg, webp'
-            ]);
+            ]));
+
             // Delete the old profile image if it exists
             if ($event->profile_image) {
                 Storage::disk('public')->delete($event->profile_image);
@@ -134,7 +155,7 @@ class EventController extends BaseController
 
             // Store the new profile image
             $profileImage = $request->file('profile_image');
-            $imagePath = $profileImage->store('images/events', 'public');  // Store the image in the 'images' directory in the 'public' disk
+            $imagePath = $profileImage->store('images/events', 'public'); // Store the image in the 'images' directory in the 'public' disk
 
             // Add the new image path to the validated data
             $validatedData['profile_image'] = $imagePath;
@@ -142,18 +163,21 @@ class EventController extends BaseController
 
         // Update the existing Event with the validated data
         $event->update($validatedData);
-        return redirect()->route('events.show', ['event' => $event->id])
+
+        return redirect()->route('events.show', ['event' => $event->event_id])
             ->with('success', 'SUCCESS!');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event)
     {
+        if($event->profile_image) {
         Storage::disk('public')->delete($event->profile_image);
+        }
         $event->delete();
-
         return redirect()->route('events.index')
             ->with('success', 'SUCCESSFULLY DELETED!');
     }

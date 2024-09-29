@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendee;
+use App\Models\AttendeeRecord;
+use App\Models\AttendeeRecordRecord;
 use App\Models\Event;
 use Illuminate\Http\Request;
-class AttendeeController extends Controller
+class AttendeeRecordController extends Controller
 {
 
     /**
@@ -14,16 +15,16 @@ class AttendeeController extends Controller
     public function index(Event $event,Request $request)
     {
         // Fetch the attendees of the event
-        $attendees = $event->attendees()->get();
+        $attendee_records = $event->attendee_records()->get();
 
-        if ($request->user()->cannot('viewAny',[Attendee::class,$event])) { //use policy to check if user can viewa attendance records,
+        if ($request->user()->cannot('viewAny',[AttendeeRecord::class,$event])) { //use policy to check if user can viewa attendance records,
         //also passed the event so that only owner of event can see all attendance records of this event
             abort(403);
         }
 
-        return inertia('Attendee/Index', [
+        return inertia('AttendeeRecord/Index', [
             'event' => $event,
-            'attendees' => $attendees->load('user') //load each related user for each attendee
+            'attendee_records' => $attendee_records->load('master_list_member')
         ]);
     }
 
@@ -70,11 +71,11 @@ class AttendeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event , Attendee $attendee)
+    public function destroy(Event $event , AttendeeRecord $attendee)
     {
         $attendee->delete();
 
-        return redirect()->route('attendees.index',["event" => $event->id])
-        ->with("success","Attendee deleted successfully.");
+        return redirect()->route('attendees.index',["event" => $event->event_id])
+        ->with("success","AttendeeRecord deleted successfully.");
     }
 }

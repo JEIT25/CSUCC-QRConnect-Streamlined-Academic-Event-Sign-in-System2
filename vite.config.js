@@ -6,7 +6,7 @@ export default defineConfig({
     // server: {
     //     host: '0.0.0.0', // This binds the server to all network interfaces.
     //     hmr: {
-    //         host: '192.168.1.10', // Use your computer's local IP address
+    //         host: '192.168.1.15', // Use your computer's local IP address
     //     }
     // },
     plugins: [

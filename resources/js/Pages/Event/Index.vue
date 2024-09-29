@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto px-4 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link v-for="event in events" :key="event.id" :href="`/events/${event.id}`"
+            <Link v-for="event in events" :key="event.event_id" :href="`/events/${event.event_id}`"
                 class="bg-white shadow-md rounded-lg p-6 hover:bg-gray-300 transition-colors flex flex-col justify-center">
             <!-- <img :src="`/storage/${ event.profile_image }`" alt=""> incase profile image is to be displyed in index page -->
             <h3 class="text-xl font-bold mb-2">{{ event.name }}</h3>

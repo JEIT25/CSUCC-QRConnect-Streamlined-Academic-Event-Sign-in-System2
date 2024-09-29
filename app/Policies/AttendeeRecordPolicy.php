@@ -2,25 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\Attendee;
+use App\Models\AttendeeRecord;
 use App\Models\Event;
 use App\Models\User;
+use Database\Factories\AttendeeRecordFactory;
 use Illuminate\Auth\Access\Response;
 
-class AttendeePolicy
+class AttendeeRecordPolicy
 {
-    /**
+  /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user, Event $event): bool
     {
-        return $user->type == "facilitator" && $event->user_id === $user->id;
+        return $user->type == "facilitator" && $event->facilitator_id === $user->user_id;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Attendee $attendee): bool
+    public function view(User $user, AttendeeRecord $attendee_record): bool
     {
         return $user->type == "facilitator";
     }
@@ -30,13 +31,13 @@ class AttendeePolicy
      */
     public function create(User $user,Event $event): bool
     {
-        return $user->type == "facilitator" && $event->user_id === $user->id;
+        return $user->type == "facilitator" && $event->facilitator_id === $user->user_id;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Attendee $attendee): bool
+    public function update(User $user, AttendeeRecord $attendee_record): bool
     {
         return $user->type == "facilitator";
     }
@@ -44,7 +45,7 @@ class AttendeePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Attendee $attendee): bool
+    public function delete(User $user, AttendeeRecord $attendee_record): bool
     {
         return $user->type == "facilitator";
     }
@@ -52,7 +53,7 @@ class AttendeePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Attendee $attendee): bool
+    public function restore(User $user, AttendeeRecord $attendee_record): bool
     {
         return $user->type == "facilitator";
     }
@@ -60,7 +61,7 @@ class AttendeePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Attendee $attendee,Event $event): bool
+    public function forceDelete(User $user, AttendeeRecord $attendee_record,Event $event): bool
     {
         return $user->type == "facilitator" && $event->user_id === $user->id;
     }
