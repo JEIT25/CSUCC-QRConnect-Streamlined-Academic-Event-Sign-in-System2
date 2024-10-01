@@ -54,8 +54,8 @@
                 <label for="semester" class="block text-sm font-medium text-gray-700">Semester</label>
                 <select v-model="form.semester" id="semester" class="input">
                     <option value="">Select Semester</option>
-                    <option value="First">1st Semester</option>
-                    <option value="Second">2nd Semester</option>
+                    <option value="1st">1st Semester</option>
+                    <option value="2nd">2nd Semester</option>
                     <!-- Add more semesters as needed -->
                 </select>
                 <div class="input-error" v-if="form.errors.semester">

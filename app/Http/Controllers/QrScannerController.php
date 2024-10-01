@@ -15,12 +15,15 @@ class QrScannerController extends Controller
     private function checkInOrOut($event, $member, $type = "check_in", $action = "check in")
     {
         try {
-            // Check if the member is already checked in for this event
+            $today = now()->toDateString(); // Get today's date (YYYY-MM-DD format)
+
             $existingAttendeeRecord = AttendeeRecord::where('event_id', $event->event_id)
                 ->where('master_list_member_id', $member->master_list_member_id)
-                ->first();
+                ->whereRaw('DATE(created_at) = ?', [$today]) // Filter by the date of created_at
+                ->orderBy('created_at', 'desc') // Order by highest to lowest datetime
+                ->first(); // Get the first result
 
-            if ($existingAttendeeRecord) {
+            if ($existingAttendeeRecord) { //check attendee if dont have check-in or check-out for today
                 // If already checked in, return a message saying so
                 if ($existingAttendeeRecord->$type) {
                     return response()->json([
@@ -29,14 +32,15 @@ class QrScannerController extends Controller
                         'attendee_record' => $member,
                         $type => $existingAttendeeRecord->$type,
                     ]);
-                } else { // If existing attendee and did not check in yet
-                    $existingAttendeeRecord->update([$type => now()]);
-                    return response()->json([
-                        'message' => "$action successful",
-                        'attendee_record' => $member,
-                        'status' => true,
-                        $type => $existingAttendeeRecord->$type,
-                    ]);
+                } else { // If existing attendee and did not check in yet for today
+                        $existingAttendeeRecord->update([$type => now()]);
+
+                        return response()->json([
+                            'message' => "$action successful",
+                            'attendee_record' => $member,
+                            'status' => true,
+                            $type => $existingAttendeeRecord->$type,
+                        ]);
                 }
             }
 

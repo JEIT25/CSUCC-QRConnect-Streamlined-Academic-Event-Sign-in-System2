@@ -2,11 +2,11 @@
     <div class="container mx-auto px-4 py-6">
         <div class="bg-gray-100 shadow-lg rounded-lg p-6">
             <!-- Master List Header -->
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center justify-center mb-4">
                 <h1 class="text-2xl font-bold">{{ props.master_list.name }}</h1>
                 <!-- Delete Master List Button -->
                 <Link :href="`/events/${props.master_list.event_id}/master-lists/${props.master_list.master_list_id}`"
-                    as="button" method="delete" class="text-red-500 hover:text-red-700">
+                    as="button" method="delete" class="text-red-500 text-right hover:text-red-700 ml-52">
                 Delete Master List
                 </Link>
             </div>
@@ -31,12 +31,11 @@
                                     method="delete">
                                 Delete
                                 </Link>
-                                <button @click="showQRCode(member.unique_id,member.full_name)"
+                                <button @click="showQRCode(member.unique_id, member.full_name)"
                                     class="bg-blue-500 text-white hover:bg-blue-600 px-2 py-1 rounded ml-2">
                                     QR Code
                                 </button>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -77,7 +76,7 @@
 Format: Full Name,UniqueId(student id, etc.)
 Example: Josh M. Ghad, 2022-7890
                     " class="border border-gray-300 w-full h-32 p-4 rounded-lg mb-4" required></textarea>
-
+                    <input type="file" @change="handleFileUpload" class="mb-4" />
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                         Add Students by Bulk
                     </button>
@@ -107,7 +106,6 @@ Example: Josh M. Ghad, 2022-7890
                     <qrcode-vue id="qrCode" :value="member.unique_id" :size="200" />
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -119,6 +117,7 @@ import QrcodeVue from 'qrcode.vue';
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
 import html2canvas from 'html2canvas';
+import * as XLSX from 'xlsx';
 
 const props = defineProps({
     master_list: Object,
@@ -155,42 +154,38 @@ const toggleBulkForm = () => {
     showIndividualForm.value = false;
 };
 
-// Show QR Code modal
-const showQRCode = (uniqueId,fullName) => {
-    selectedUniqueId.value = uniqueId;
-    selectedMember.value = fullName;
-    showQRCodeModal.value = true;
-};
+// Handle file upload and parse XLSX data (start reading from second row)
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-// Close QR Code modal
-const closeQRCode = () => {
-    showQRCodeModal.value = false;
-};
-
-// Download QR Code
-const downloadQRCode = () => {
-    const canvas = document.querySelector('canvas');
-    if (canvas) {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = `qrcode-${selectedUniqueId.value}.png`;
-        link.click();
+            bulkInput.value = jsonData
+                .slice(1) // Skip the first row (header row)
+                .map(row => `${row[0]}, ${row[1]}`) // Use the first and second columns
+                .join("\n");
+        };
+        reader.readAsArrayBuffer(file);
     }
 };
 
+
 // Watch the bulkInput and update formMany.members in real-time
 watch(bulkInput, (newValue) => {
-    const lines = newValue.split('\n'); // Split input by newlines
-    formMany.members = []; // Clear current members array
+    const lines = newValue.split('\n');
+    formMany.members = [];
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].split(','); // Split each line by comma
-        if (line.length === 2 && line[0].trim() !== "" && line[1].trim() !== "") { // Ensure both full_name and unique_id are present
+        const line = lines[i].split(',');
+        if (line.length === 2 && line[0].trim() !== "" && line[1].trim() !== "") {
             const full_name = line[0].trim();
             const unique_id = line[1].trim();
-            // Check if the member with the same unique_id already exists in the formMany.members array
             const exists = formMany.members.some(member => member.unique_id === unique_id);
-
-            // Add parsed member to formMany.members array if it doesn't already exist
             if (!exists) {
                 formMany.members.push({ full_name, unique_id });
             }
@@ -213,29 +208,45 @@ const addStudentsBulk = () => {
     });
 };
 
+// Show QR Code modal
+const showQRCode = (uniqueId, fullName) => {
+    selectedUniqueId.value = uniqueId;
+    selectedMember.value = fullName;
+    showQRCodeModal.value = true;
+};
+
+// Close QR Code modal
+const closeQRCode = () => {
+    showQRCodeModal.value = false;
+};
+
+// Download QR Code
+const downloadQRCode = () => {
+    const canvas = document.querySelector('canvas');
+    if (canvas) {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `qrcode-${selectedUniqueId.value}.png`;
+        link.click();
+    }
+};
 
 // Download all QR codes as PDF
 const downloadAllQRCodesAsPDF = async () => {
     const pdf = new jsPDF();
-    const members = props.master_list_members; // Assuming this is the data structure you are using
+    const members = props.master_list_members;
 
     for (let i = 0; i < members.length; i++) {
         const member = members[i];
-
-        // Generate QR code image data
         const imgData = await QRCode.toDataURL(member.unique_id, {
-            width: 200, // Set size of the QR code
-            margin: 1,  // Adjust margin as needed
+            width: 200,
+            margin: 1,
         });
 
-        // Add image to PDF
-        pdf.addImage(imgData, 'PNG', 10, 10 + (i * 70), 50, 50); // Adjust positioning as needed
-
-        // Add text below the QR code
-        pdf.text(member.full_name, 10, 70 + (i * 70)); // Adjust positioning as needed
+        pdf.addImage(imgData, 'PNG', 10, 10 + (i * 70), 50, 50);
+        pdf.text(member.full_name, 10, 70 + (i * 70));
     }
 
-    // Save the PDF
     pdf.save(`${props.master_list.name}-QRCodes.pdf`);
 };
 </script>
