@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained('events',"event_id")->onDelete('cascade')->onUpdate('cascade');   // Foreign key to events table
             $table->dateTime('check_in')->nullable();   // Check-in datetime
             $table->dateTime('check_out')->nullable();  // Check-out datetime
+            $table->dateTime('single_signin')->nullable();  // Check-out datetime
             $table->timestamps();
         });
     }

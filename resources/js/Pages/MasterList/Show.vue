@@ -231,10 +231,15 @@ const downloadQRCode = () => {
     }
 };
 
-// Download all QR codes as PDF
+
 const downloadAllQRCodesAsPDF = async () => {
     const pdf = new jsPDF();
     const members = props.master_list_members;
+    const margin = 10;
+    const qrCodeSize = 50; // Size of QR Code
+    const qrCodeSpacing = 70; // Space between QR codes
+    const pageHeight = pdf.internal.pageSize.height;
+    let currentY = margin; // Track the current Y position
 
     for (let i = 0; i < members.length; i++) {
         const member = members[i];
@@ -243,10 +248,23 @@ const downloadAllQRCodesAsPDF = async () => {
             margin: 1,
         });
 
-        pdf.addImage(imgData, 'PNG', 10, 10 + (i * 70), 50, 50);
-        pdf.text(member.full_name, 10, 70 + (i * 70));
+        // Check if we need to add a new page
+        if (currentY + qrCodeSize + margin > pageHeight) {
+            pdf.addPage();
+            currentY = margin; // Reset Y position after adding a new page
+        }
+
+        // Center the QR code and text
+        const centerX = (pdf.internal.pageSize.width - qrCodeSize) / 2;
+
+        pdf.addImage(imgData, 'PNG', centerX, currentY, qrCodeSize, qrCodeSize);
+        pdf.text(member.full_name, centerX, currentY + qrCodeSize + 5); // 5 pixels below the QR code
+
+        // Move the Y position for the next QR code
+        currentY += qrCodeSpacing;
     }
 
     pdf.save(`${props.master_list.name}-QRCodes.pdf`);
 };
+
 </script>

@@ -110,7 +110,9 @@ class ExportAttendeeRecordController extends Controller
     public function exportClassAttendanceToExcel(Event $event, $selectedDate)
     {
         // Fetch all members from the master list
-        $members = $event->master_list->master_list_members()->get();
+        $members = $event->master_list->master_list_members()
+        ->orderBy('full_name') //alphabetical
+        ->get();
 
         // Prepare the data for Excel export
         $data = [];
