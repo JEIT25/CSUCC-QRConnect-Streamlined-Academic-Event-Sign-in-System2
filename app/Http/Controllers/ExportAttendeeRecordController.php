@@ -13,7 +13,7 @@ class ExportAttendeeRecordController extends Controller
     public function exportAttendeeRecords(Event $event, $template, Request $request)
     {
         // Retrieve the selected date from the query parameters
-        $selectedDate = $request->query('date');
+        $selectedDate = $request->query('date'); //test
 
         // Export as PDF for class orientation
         if ($template === "general-template") {
