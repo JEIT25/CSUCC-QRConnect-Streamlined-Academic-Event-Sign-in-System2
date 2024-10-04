@@ -1,17 +1,17 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg ">
+  <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg">
     <h2 class="text-2xl font-bold mb-6 text-left">Create New Event</h2>
 
     <form @submit.prevent="submitForm" enctype="multipart/form-data" class="space-y-4">
       <!-- Name and Location Fields in a Row -->
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="w-full sm:w-1/2 px-2">
-          <label for="name" class="label">Name</label>
+          <label for="name" class="label font-bold">Name</label>
           <input v-model.trim="form.name" type="text" id="name" class="input" placeholder="" />
           <div class="input-error" v-if="form.errors.name">{{ form.errors.name }}</div>
         </div>
         <div class="w-full sm:w-1/2 px-2">
-          <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+          <label for="location" class="block text-sm font-bold text-gray-700">Location</label>
           <input v-model.trim="form.location" type="text" id="location" class="input" placeholder="Room number, building name, etc." />
           <div class="input-error" v-if="form.errors.location">{{ form.errors.location }}</div>
         </div>
@@ -19,7 +19,7 @@
 
       <!-- Description Field -->
       <div class="mb-4">
-        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+        <label for="description" class="block text-sm font-bold text-gray-700">Description</label>
         <textarea v-model.trim="form.description" id="description" class="input" rows="4"></textarea>
         <div class="input-error" v-if="form.errors.description">{{ form.errors.description }}</div>
       </div>
@@ -27,12 +27,12 @@
       <!-- Start Date and School Year in a Row -->
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="w-full sm:w-1/2 px-2">
-          <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+          <label for="start_date" class="block text-sm font-bold text-gray-700">Start Date</label>
           <input v-model.trim="form.start_date" type="date" id="start_date" class="input" />
           <div class="input-error" v-if="form.errors.start_date">{{ form.errors.start_date }}</div>
         </div>
         <div class="w-full sm:w-1/2 px-2">
-          <label for="school_year" class="block text-sm font-medium text-gray-700">School Year (Optional)</label>
+          <label for="school_year" class="block text-sm font-bold text-gray-700">School Year (Optional)</label>
           <input v-model.trim="form.school_year" type="text" id="school_year" class="input" placeholder="e.g., 2023-2024" />
           <div class="input-error" v-if="form.errors.school_year">{{ form.errors.school_year }}</div>
         </div>
@@ -41,7 +41,7 @@
       <!-- Semester and Type in a Row -->
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="w-full sm:w-1/2 px-2">
-          <label for="semester" class="block text-sm font-medium text-gray-700">Semester (Optional)</label>
+          <label for="semester" class="block text-sm font-bold text-gray-700">Semester (Optional)</label>
           <select v-model="form.semester" id="semester" class="input">
             <option value="">Select Semester</option>
             <option value="1st">1st</option>
@@ -50,7 +50,7 @@
           <div class="input-error" v-if="form.errors.semester">{{ form.errors.semester }}</div>
         </div>
         <div class="w-full sm:w-1/2 px-2">
-          <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+          <label for="type" class="block text-sm font-bold text-gray-700">Type</label>
           <select v-model="form.type" id="type" class="input">
             <option value="">Select Event Type</option>
             <option value="class attendance">Class Attendance</option>
@@ -64,7 +64,7 @@
 
       <!-- Other Type Field -->
       <div v-if="form.type === 'other'" class="mb-4">
-        <label for="other_type" class="block text-sm font-medium text-gray-700">Specify Other Type</label>
+        <label for="other_type" class="block text-sm font-bold text-gray-700">Specify Other Type</label>
         <input v-model.trim="form.other_type" type="text" id="other_type" class="input" placeholder="Specify type" />
         <div class="input-error" v-if="form.errors.other_type">{{ form.errors.other_type }}</div>
       </div>
@@ -72,12 +72,12 @@
       <!-- Subject and Subject Code in a Row -->
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="w-full sm:w-1/2 px-2">
-          <label for="subject" class="block text-sm font-medium text-gray-700">Subject (Optional)</label>
+          <label for="subject" class="block text-sm font-bold text-gray-700">Subject (Optional)</label>
           <input v-model.trim="form.subject" type="text" id="subject" class="input" placeholder="Enter subject" />
           <div class="input-error" v-if="form.errors.subject">{{ form.errors.subject }}</div>
         </div>
         <div class="w-full sm:w-1/2 px-2">
-          <label for="subject_code" class="block text-sm font-medium text-gray-700">Subject Code (Optional)</label>
+          <label for="subject_code" class="block text-sm font-bold text-gray-700">Subject Code (Optional)</label>
           <input v-model.trim="form.subject_code" type="text" id="subject_code" class="input" placeholder="Enter subject code" />
           <div class="input-error" v-if="form.errors.subject_code">{{ form.errors.subject_code }}</div>
         </div>
@@ -85,7 +85,7 @@
 
       <!-- Profile Image Field -->
       <div class="mb-4">
-        <label for="profile_image" class="block text-sm font-medium text-gray-700">Profile Image (Optional)</label>
+        <label for="profile_image" class="block text-sm font-bold text-gray-700">Profile Image (Optional)</label>
         <input
           @change="handleFileUpload"
           type="file"
