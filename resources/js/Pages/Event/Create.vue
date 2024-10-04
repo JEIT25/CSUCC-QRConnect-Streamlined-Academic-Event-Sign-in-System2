@@ -11,7 +11,7 @@
                     {{ form.errors.name }}
                 </div>
             </div>
-
+            
             <!-- Description -->
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>

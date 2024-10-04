@@ -6,26 +6,31 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 
-class FacilitatorController extends Controller
+
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource (Home Page for authenticated facilitator).
      */
     public function index()
     {
-        return Inertia::render('Facilitators/Home', [
-            'facilitator' => Auth::user(),
+        $facilitators = User::where('type', 'facilitator')->get();
+
+        return Inertia::render('User/Index', [
+            'facilitator_accs' => $facilitators,
         ]);
     }
 
     /**
      * Show the form for creating a new facilitator account.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render('Facilitator/Create');
+        if ($request->user()->type == "facilitator") {
+            return abort(403, 'Unauthorized action.');
+        }
+        return inertia('User/Create');
     }
 
     /**
@@ -37,18 +42,16 @@ class FacilitatorController extends Controller
         $validated = $request->validate([
             'lname' => 'required|string|max:255',
             'fname' => 'required|string|max:255',
-            'school_id_number' => 'nullable|string|unique:users',
             'birth_date' => 'required|date',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-        
+
         // Create the user
         User::create([
             'type' => 'facilitator', //type to facilitator
             'lname' => $validated['lname'],
             'fname' => $validated['fname'],
-            'school_id_number' => $validated['school_id_number'],
             'birth_date' => $validated['birth_date'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -56,7 +59,7 @@ class FacilitatorController extends Controller
             'valid_id' => null // Default to null for user type facilitator
         ]);
 
-        return redirect()->route('homepage')->with('success', 'Facilitator account created successfully.');
+        return redirect()->route('homepage')->with('success', 'User account created successfully.');
     }
 
 
@@ -65,7 +68,7 @@ class FacilitatorController extends Controller
      */
     public function show(User $facilitator)
     {
-        return Inertia::render('Facilitators/Show', [
+        return Inertia::render('Users/Show', [
             'facilitator' => $facilitator,
         ]);
     }
@@ -75,7 +78,7 @@ class FacilitatorController extends Controller
      */
     public function edit(User $facilitator)
     {
-        return Inertia::render('Facilitators/Edit', [
+        return Inertia::render('Users/Edit', [
             'facilitator' => $facilitator,
         ]);
     }
@@ -107,16 +110,38 @@ class FacilitatorController extends Controller
             'valid_id' => $validated['valid_id'],
         ]);
 
-        return redirect()->route('facilitators.index')->with('success', 'Facilitator account updated successfully.');
+        return redirect()->route('users.index')->with('success', 'User account updated successfully.');
     }
+    public function updateAccStatus(User $user, Request $request)
+    {
+        // Get the current status of the user
+        $currStatus = $user->acc_status;
+
+        // Determine the new status based on the current status
+        $newStatus = $currStatus === 'active' ? 'disabled' : 'active';
+
+        // Update user with the new status
+        $result = $user->update([
+            'acc_status' => $newStatus // Ensure this value matches the enum definition
+        ]);
+
+        // Optional: Check if the update was successful
+        if (!$result) {
+            return redirect()->route('users.index')->with('error', "Failed to update the user status.");
+        }
+
+        // Redirect with a success message
+        return redirect()->route('users.index')->with('success', "Updated successfully, account status has been updated");
+    }
+
 
     /**
      * Remove the specified facilitator from storage.
      */
-    public function destroy(User $facilitator)
+    public function destroy(User $user)
     {
-        $facilitator->delete();
+        $user->delete();
 
-        return redirect()->route('facilitators.index')->with('success', 'Facilitator account deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'User account deleted successfully.');
     }
 }
