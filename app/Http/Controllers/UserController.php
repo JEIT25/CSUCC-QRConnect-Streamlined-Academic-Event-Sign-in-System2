@@ -6,10 +6,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
 
-class UserController extends Controller
+class UserController extends BaseController
 {
+    use AuthorizesRequests;
+
+    public function __construct()
+    { //third way in Authorization (easiest)
+        $this->authorizeResource(User::class, 'user');
+    }
     /**
      * Display a listing of the resource (Home Page for authenticated facilitator).
      */

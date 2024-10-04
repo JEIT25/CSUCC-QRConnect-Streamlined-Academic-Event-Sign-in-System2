@@ -31,6 +31,8 @@ Route::get('login', fn () => inertia('Auth/Login'))//redirect to homepage wtoh a
 Route::post('login',[AuthController::class,'store'])
 ->name('login.store');
 
+Route::get('logout', fn() => (abort(404)));
+
 Route::delete('logout', [AuthController::class, 'destroy'])
 ->name('login.destroy'); //log out user
 //
@@ -49,7 +51,8 @@ Route::resource('events', EventController::class)
 
 //Route for exporting attendee_records based on template
 Route::get('/export-attendee-records/{event}/{template}',[ExportAttendeeRecordController::class,'ExportAttendeeRecords'])
-->name('attendee-records.export');
+->name('attendee-records.export')
+    ->middleware('auth');
 
 //Admin routes
 Route::resource('admins',AdminController::class)
@@ -68,7 +71,7 @@ Route::post('/users/{user}/{status}', [UserController::class, 'updateAccStatus']
 Route::get('/events/{event}/attendees', [AttendeeRecordController::class, 'index'])
     ->name('attendees.index')
     ->middleware('auth');
-;
+
 Route::delete('/events/{event}/attendees/{attendee}', [AttendeeRecordController::class, 'destroy'])
     ->name('attendees.destroy')
     ->middleware('auth');
@@ -115,6 +118,6 @@ Route::post('/events/{event}/qrscanner/checkout', [QrScannerController::class, '
 //
 
 //QR Generator Routes
-Route::get('qr-generator/result/{user}', [QrCodeGeneratorController::class, 'show'])
-    ->name('qr-generator.show');
+// Route::get('qr-generator/result/{user}', [QrCodeGeneratorController::class, 'show'])
+//     ->name('qr-generator.show');
 //
