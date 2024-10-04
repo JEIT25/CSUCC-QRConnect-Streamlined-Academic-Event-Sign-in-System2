@@ -4,7 +4,7 @@
         <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl mb-10">
             <!-- Image Section -->
             <div class="flex justify-center md:justify-start w-full md:w-1/2 mb-8 md:mb-0">
-                <img :src="qrBackground" alt="QR Code Animation" class="max-w-full" />
+                <img :src="qrBackground" alt="QR Code Animation" class="max-w-full w-64 md:w-96" />
             </div>
 
             <!-- Text Section -->

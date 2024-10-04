@@ -11,5 +11,18 @@ export default {
   plugins: [
     require('@tailwindcss/forms'),
   ],
+
 }
+
+// // tailwind.config.js
+// module.exports = {
+//   theme: {
+//     extend: {
+//       fontFamily: {
+//         hubballi: ['Hubballi', 'sans-serif'],
+//       },
+//     },
+//   },
+//   // other configurations...
+// }
 
