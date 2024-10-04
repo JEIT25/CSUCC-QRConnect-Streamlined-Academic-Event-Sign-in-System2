@@ -15,7 +15,7 @@
                 <span v-if="form.errors.password" class="text-red-500 text-sm">{{ form.errors.password }}</span>
             </div>
             <button type="submit"
-                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Log In
             </button>
             <Link href="/facilitators/create" class="text-blue-500 hover:underline text-center">
