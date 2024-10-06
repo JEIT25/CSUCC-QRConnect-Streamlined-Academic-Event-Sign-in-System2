@@ -18,13 +18,12 @@ class EventController extends BaseController
     { //third way in Authorization (easiest)
         $this->authorizeResource(Event::class, 'event');
     }
-    public function index()
+    public function index(Request $request)
     {
         return inertia(
             'Event/Index',
             [
-                // 'events' => Event::where("is_restricted","=","false")->latest()->get()
-                'events' => Event::latest()->get()
+                'events' => Event::where('facilitator_id',$request->user()->user_id)->get()
             ]
         );
     }
@@ -44,7 +43,7 @@ class EventController extends BaseController
      */
     public function store(Request $request)
     {
-        $user = $request->user(); // Get current user from the request
+        $user = $request->user(); // Get current user from the request'
 
         // Get the current year
         $currentYear = date('Y');
@@ -55,6 +54,7 @@ class EventController extends BaseController
             'description' => 'required',
             'location' => 'required',
             'start_date' => 'required|date',
+            'end_date' => 'required|date',
             'profile_image' => 'nullable|mimes:jpg,png,jpeg,webp|max:5000', // Validate image type and size
             'type' => 'required',  // 'type' field is required
             'other_type' => 'nullable|required_if:type,other', // 'other_type' is required only if 'type' is 'other'
@@ -153,6 +153,7 @@ class EventController extends BaseController
             'description' => 'required',
             'location' => 'required',
             'start_date' => 'required|date',
+            'end_date' => 'required|date',
             'subject' => 'nullable|string',
             'subject_code' => 'nullable|string',
             'type' => 'required', // Validate type

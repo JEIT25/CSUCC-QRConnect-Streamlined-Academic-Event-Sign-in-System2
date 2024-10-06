@@ -10,7 +10,10 @@
                 <strong>Location:</strong> {{ event.location }}
             </p>
             <p class="text-sm text-gray-600">
-                <strong>Date:</strong> {{ new Date(event.start_date).toLocaleDateString() }}
+                <strong>Start Date:</strong> {{ new Date(event.start_date).toLocaleDateString() }}
+            </p>
+            <p class="text-sm text-gray-600">
+                <strong>End Date:</strong> {{ new Date(event.end_date).toLocaleDateString() }}
             </p>
             </Link>
         </div>

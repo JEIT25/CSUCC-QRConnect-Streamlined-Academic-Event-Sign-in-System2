@@ -40,6 +40,15 @@
                 </div>
             </div>
 
+            <!-- End Date -->
+            <div class="mb-4">
+                <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input v-model.trim="form.end_date" type="date" id="end_date" class="input" />
+                <div class="input-error" v-if="form.errors.end_date">
+                    {{ form.errors.end_date }}
+                </div>
+            </div>
+
             <!-- School Year-->
             <div class="mb-4">
                 <label for="school_year" class="block text-sm font-medium text-gray-700">School Year</label>
@@ -144,6 +153,7 @@ let form = useForm({
     description: props.event.description,
     location: props.event.location,
     start_date: props.event.start_date,
+    end_date: props.event.end_date,
     school_year: props.event.school_year,
     semester: props.event.semester || '', // New semester attribute
     type: props.event.type || '', // Existing type attribute

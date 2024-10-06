@@ -100,6 +100,14 @@ Route::delete('master-list-members/{master_list_member}', [MasterListMemberContr
 //
 
 //QR scanner Routes
+Route::get('/events/{event}/qrscanner/single-signin', [QrScannerController::class, 'singleSignin'])
+    ->name('qrscanner.single-signin.get')
+    ->middleware('auth');
+
+Route::post('/events/{event}/qrscanner/single-signin', [QrScannerController::class, 'singleSigninPost'])
+    ->name('qrscanner.single-signin.post')
+    ->middleware('auth');
+
 Route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkin'])
     ->name('qrscanner.checkin.get')
     ->middleware('auth');

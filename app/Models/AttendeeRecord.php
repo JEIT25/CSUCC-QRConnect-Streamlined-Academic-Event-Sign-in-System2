@@ -15,7 +15,8 @@ class AttendeeRecord extends Model
         'master_list_member_id',
         'event_id',
         'check_in',
-        'check_out'
+        'check_out',
+        'single_signin'
     ];
     public function master_list_member()
     {

@@ -11,7 +11,7 @@
                     {{ form.errors.name }}
                 </div>
             </div>
-            
+
             <!-- Description -->
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -37,6 +37,15 @@
                 <input v-model.trim="form.start_date" type="date" id="start_date" class="input" />
                 <div class="input-error" v-if="form.errors.start_date">
                     {{ form.errors.start_date }}
+                </div>
+            </div>
+
+            <!-- End Date -->
+            <div class="mb-4">
+                <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input v-model.trim="form.end_date" type="date" id="end_date" class="input" />
+                <div class="input-error" v-if="form.errors.end_date">
+                    {{ form.errors.end_date }}
                 </div>
             </div>
 
@@ -140,6 +149,7 @@ const form = useForm({
     description: '',
     location: '',
     start_date: '',
+    end_date: '',
     school_year: '',  // New attribute for school year
     semester: '',  // Default semester
     profile_image: null,

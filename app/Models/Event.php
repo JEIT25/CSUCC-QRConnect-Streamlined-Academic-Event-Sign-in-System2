@@ -40,9 +40,10 @@ class Event extends Model
         'description',
         'profile_image',
         'start_date',
+        'end_date',
         'location',
         'subject_code',
         'semester',
-        'school_year'
+        'school_year',
     ];
 }
