@@ -1,10 +1,11 @@
 <template>
-    <div class="container mx-auto px-4 py-6 flex justify-center items-center min-h-screen">
-        <div class="bg-gray-100 shadow-2xl rounded-lg p-10 w-full max-w-4xl">
+    <div class="flex justify-center items-center min-h-screen "> <!-- Ensure full height with gray background -->
+        <!-- set default photo of the event -->
+        <div class="p-10 w-full max-w-6xl"> <!-- Wrapper for padding and width -->
             <!-- Event Image -->
             <div class="flex justify-center mb-6">
                 <img :src="event.profile_image" alt="Event Profile Image"
-                    class="w-md h-60 rounded-lg shadow-md object-cover">
+                    class="w-full h-60 rounded-lg shadow-md object-cover"> <!-- Change w-md to w-full -->
             </div>
 
             <!-- Event Details -->
@@ -40,41 +41,61 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div v-if="user.type === 'facilitator'" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <Link :href="`/events/${event.event_id}/qrscanner/checkin/`" class="btn-primary" as="button"
-                    method="get">
-                Check-In
-                </Link>
-                <Link :href="`/events/${event.event_id}/qrscanner/checkout`" class="btn-primary" as="button"
-                    method="get">
-                Check-Out
+<!-- Action Buttons -->
+<div v-if="user.type === 'facilitator'" class="relative mb-6 space-y-6"> <!-- Space between sections -->
+
+    <!-- Upper right for Edit and Delete buttons (in a flex row layout) -->
+    <div class="flex justify-end space-x-4"> <!-- Flex to align both buttons horizontally, positioned at the top right -->
+        <Link :href="`/events/${event.event_id}/edit`" class="btn-primary" as="button" method="get">
+            Edit
+        </Link>
+        <Link :href="`/events/${event.event_id}`" class="btn-primary" as="button" method="delete">
+            Delete
+        </Link>
+    </div>
+
+    <!-- Wrap all the other buttons in a single container -->
+    <div class="bg-gray-200 p-6 rounded-lg">
+        <!-- Inner div split in two (left and right sections) with a gap -->
+        <div class="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-8"> <!-- Added space-x-8 for horizontal gap -->
+            
+            <!-- Left section for Show Masterlist, View Attendance, Export Attendance -->
+            <div class="flex flex-col space-y-4 w-full md:w-1/2"> <!-- Flex column for stacking these buttons -->
+                <h3 class="text-lg font-bold mb-2 text-gray-800 text-center">Attendance Management</h3> <!-- Title for left section -->
+                <Link v-if="master_list" :href="`/events/${event.event_id}/master-lists/${master_list.master_list_id}`"
+                    class="btn-primary" as="button" method="get">
+                    Show MasterList
                 </Link>
                 <Link :href="`/events/${event.event_id}/attendees`" class="btn-primary" as="button" method="get">
-                View Attendance List
+                    View Attendance List
                 </Link>
-                <!-- Button to trigger the export modal -->
                 <button @click="showExportModal = true" class="btn-primary">
                     Export Attendance
                 </button>
-                <Link v-if="master_list" :href="`/events/${event.event_id}/master-lists/${master_list.master_list_id}`"
-                    class="btn-primary" as="button" method="get">
-                Show MasterList
+            </div>
+            
+            <!-- Right section for Check-In, Check-Out (attendance actions) -->
+            <div class="flex flex-col space-y-4 w-full md:w-1/2"> <!-- Flex column to stack buttons -->
+                <h3 class="text-lg font-bold mb-2 text-gray-800 text-center">Attendance Actions</h3> <!-- Title for this section -->
+                <Link :href="`/events/${event.event_id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
+                    Check-In
                 </Link>
-                <button v-else @click="createMasterList" class="btn-primary">
-                    Create MasterList
-                </button>
-                <Link :href="`/events/${event.event_id}/edit`" class="btn-primary" as="button" method="get">
-                Edit
-                </Link>
-                <Link :href="`/events/${event.event_id}`" class="btn-primary" as="button" method="delete">
-                Delete
+                <Link :href="`/events/${event.event_id}/qrscanner/checkout`" class="btn-primary" as="button" method="get">
+                    Check-Out
                 </Link>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
             <!-- Export Modal (Overlay) -->
-            <div v-if="showExportModal"
-                class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
+            <div v-if="showExportModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
                     <h3 class="text-lg font-bold mb-4">Select Export Options</h3>
                     <form @submit.prevent="exportAttendance">

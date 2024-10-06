@@ -1,7 +1,7 @@
 <template>
-    <div class="flex">
+    <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside v-if="page.props.user" class="w-64 bg-slate-950 p-4 h-screen hidden lg:block shadow-md border-r-4 border-yellow-500">
+        <aside v-if="page.props.user" class="w-64 bg-slate-950 p-4 h-screen  shadow-md border-r-4 border-yellow-500">
     <!-- Administrator Info Section -->
     <div class="flex flex-col items-center ml-2 mt-9 mb-7">
         <svg fill="#ffd333" height="100px" width="100px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-6 md:px-12 lg:px-24"
+    <div class="h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center  md:px-12 lg:px-24"
         :style="{ backgroundImage: `url(${coloredBackgroundImage})` }">
         <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl mb-10">
             <!-- Image Section -->
