@@ -19,6 +19,10 @@
                     <label class="block text-sm font-medium text-gray-500">Start Date</label>
                     <p class="text-gray-700">{{ new Date(event.start_date).toLocaleDateString() }}</p>
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">End Date</label>
+                    <p class="text-gray-700">{{ new Date(event.end_date).toLocaleDateString() }}</p>
+                </div>
                 <div v-if="event.subject">
                     <label class="block text-sm font-medium text-gray-500">Subject</label>
                     <p class="text-gray-700">{{ event.subject }}</p>
@@ -40,7 +44,6 @@
                     <p class="text-gray-700">{{ event.semester }}</p>
                 </div>
             </div>
-
 <!-- Action Buttons -->
 <div v-if="user.type === 'facilitator'" class="relative mb-6 space-y-6"> <!-- Space between sections -->
 
@@ -77,11 +80,16 @@
             <!-- Right section for Check-In, Check-Out (attendance actions) -->
             <div class="flex flex-col space-y-4 w-full md:w-1/2"> <!-- Flex column to stack buttons -->
                 <h3 class="text-lg font-bold mb-2 text-gray-800 text-center">Attendance Actions</h3> <!-- Title for this section -->
-                <Link :href="`/events/${event.event_id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
+                <Link v-if="!event.type.includes('exam') && !event.type.includes('class attendance') && !event.type.includes('class orientation')" :href="`/events/${event.event_id}/qrscanner/single-signin`" class="btn-primary" as="button" method="get" class="btn-primary" as="button" method="get">
                     Check-In
                 </Link>
-                <Link :href="`/events/${event.event_id}/qrscanner/checkout`" class="btn-primary" as="button" method="get">
+                <Link v-if="!event.type.includes('exam') && !event.type.includes('class attendance') && !event.type.includes('class orientation')" :href="`/events/${event.event_id}/qrscanner/checkout`" class="btn-primary" as="button" method="get">
                     Check-Out
+                </Link>
+                <Link
+                    v-if="event.type.includes('exam') || event.type.includes('class attendance') || event.type.includes('class orientation')"
+                    :href="`/events/${event.event_id}/qrscanner/checkin/`" class="btn-primary" as="button" method="get">
+                Single Sign-in
                 </Link>
             </div>
         </div>
@@ -104,9 +112,15 @@
                             <label for="template" class="block text-sm font-medium text-gray-700 mb-2">Template</label>
                             <select v-model="selectedTemplate" id="template" class="w-full p-2 border rounded-md">
                                 <option value="" disabled>Select a template</option>
-                                <option value="class-orientation">Class Orientation</option>
-                                <option value="class-attendance">Class Attendance</option>
-                                <option value="general-template">Event Attendance (Check-in & Checkout)</option>
+                                <option v-if="event.type.includes('class orientation')" value="class-orientation">Class
+                                    Orientation</option>
+                                <option v-if="event.type.includes('class attendance')" value="class-attendance">Class
+                                    Attendance</option>
+                                <option v-if="event.type.includes('exam')" value="exam">Exam</option>
+                                <option
+                                    v-if="!event.type.includes('class attendance') && !event.type.includes('class orientation') && !event.type.includes('exam')"
+                                    value="general-template">Event
+                                    Attendance (Check-in & Checkout)</option>
                             </select>
                         </div>
 

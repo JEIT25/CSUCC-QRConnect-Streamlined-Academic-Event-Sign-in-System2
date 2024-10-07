@@ -13,7 +13,7 @@ class EventPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->type == "facilitator";
     }
 
     /**
@@ -21,7 +21,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event): bool
     {
-        return true;
+        return $user->type == "facilitator" && $user->id == $event->user_id;;
     }
 
     /**

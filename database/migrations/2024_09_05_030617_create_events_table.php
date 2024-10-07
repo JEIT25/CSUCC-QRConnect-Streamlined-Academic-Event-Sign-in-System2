@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('semester', ["1st", "2nd"])->nullable();
             $table->string('school_year')->nullable();
             $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
 
             $table->foreign('facilitator_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');

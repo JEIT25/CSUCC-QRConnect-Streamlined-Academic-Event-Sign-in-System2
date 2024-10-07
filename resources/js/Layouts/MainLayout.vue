@@ -104,14 +104,10 @@
                         </li>
                         <!-- Show Login only when the user is not authenticated -->
                         <li v-else>
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/login">Guest</Link>
-                        </li>
-                        
-                        <li v-if="!page.props.user">
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/students/login">Student</Link>
-                        </li>
-                        <li v-if="!page.props.user">
-                            <Link class="text-yellow-400 hover:text-yellow-200" href="/facilitators/login">Facilitator</Link>
+                            <Link class="text-yellow-400 hover:text-yellow-200" href="/logout" as="button"
+                                method="delete">
+                            Log out
+                            </Link>
                         </li>
                     </ul>
                 </div>

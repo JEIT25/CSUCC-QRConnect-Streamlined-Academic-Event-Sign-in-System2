@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <!-- Right side (School Year, Start Date, Subject, Subject Code, Type, Other Type) -->
+                <!-- Right side (School Year, Start Date, End Date, Subject, Subject Code, Type, Other Type) -->
                 <div>
                     <!-- School Year -->
                     <div class="mb-4">
@@ -66,6 +66,15 @@
                         <input v-model.trim="form.start_date" type="date" id="start_date" class="input" />
                         <div class="input-error" v-if="form.errors.start_date">
                             {{ form.errors.start_date }}
+                        </div>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="mb-4">
+                        <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                        <input v-model.trim="form.end_date" type="date" id="end_date" class="input" />
+                        <div class="input-error" v-if="form.errors.end_date">
+                            {{ form.errors.end_date }}
                         </div>
                     </div>
 
@@ -149,6 +158,7 @@ let form = useForm({
     description: props.event.description,
     location: props.event.location,
     start_date: props.event.start_date,
+    end_date: props.event.end_date, // Ensure end_date is included
     school_year: props.event.school_year,
     semester: props.event.semester || '',
     type: props.event.type || '',

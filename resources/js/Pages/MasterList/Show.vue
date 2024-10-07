@@ -115,8 +115,6 @@ import { useForm, Link } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import QrcodeVue from 'qrcode.vue';
 import jsPDF from 'jspdf';
-import QRCode from 'qrcode';
-import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 
 const props = defineProps({
@@ -198,6 +196,9 @@ const addStudent = () => {
     formOne.post(`/master-list-members/${props.master_list.master_list_id}`, {
         full_name: formOne.full_name,
         unique_id: formOne.unique_id,
+        onSuccess: () => {
+            formOne.reset(); // Reset form fields after successful submission
+        }
     });
 };
 
@@ -205,6 +206,10 @@ const addStudent = () => {
 const addStudentsBulk = () => {
     formMany.post(`/master-list-members/${props.master_list.master_list_id}`, {
         members: formMany.members,
+        onSuccess: () => {
+            bulkInput.value = ''; // Clear the bulk input field
+            formMany.reset(); // Reset form fields after successful submission
+        }
     });
 };
 

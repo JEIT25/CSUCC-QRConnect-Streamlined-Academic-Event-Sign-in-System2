@@ -15,11 +15,14 @@
                 <span v-if="form.errors.lname" class="text-red-500 text-sm">{{ form.errors.lname }}</span>
             </div>
             <div class="flex flex-col">
-                <label for="school_id_number" class="text-sm font-medium text-gray-700">School ID Number</label>
-                <input id="school_id_number" v-model.trim="form.school_id_number" placeholder="School ID Number"
-                    class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" />
-                <span v-if="form.errors.school_id_number" class="text-red-500 text-sm">{{ form.errors.school_id_number
-                    }}</span>
+                <label for="type" class="text-sm font-medium text-gray-700">Account Type</label>
+                <select id="type" v-model="form.type" required
+                    class="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                    <option disabled>Select Account Type</option>
+                    <option value="facilitator">Facilitator</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <span v-if="form.errors.type" class="text-red-500 text-sm">{{ form.errors.type }}</span>
             </div>
             <div class="flex flex-col">
                 <label for="birth_date" class="text-sm font-medium text-gray-700">Birth Date</label>
@@ -49,20 +52,17 @@
                 class="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Create Account
             </button>
-            <Link href="/facilitators/login" class="text-blue-500 hover:underline text-center">
-            <p class="mt-5">Log In with Facilitator Account</p>
-            </Link>
         </form>
     </div>
 </template>
 
 <script setup>
-import { useForm , Link} from '@inertiajs/vue3'
+import { useForm, Link } from '@inertiajs/vue3'
 
 const form = useForm({
     lname: '',
     fname: '',
-    school_id_number: '',
+    type: '',
     birth_date: '',
     email: '',
     password: '',
@@ -70,6 +70,6 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post('/facilitators');
+    form.post('/users');
 };
 </script>

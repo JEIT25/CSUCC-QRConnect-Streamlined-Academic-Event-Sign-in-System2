@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
-
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -16,23 +14,34 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
+        // Validate credentials
         $credentials = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
         ]);
 
-        if(!Auth::attempt($credentials)){
+        // Attempt authentication
+        if (!Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
-                'email' => 'Authentication Failed'
-            ]); //if the auth attemp fails,
-                //use ValidationExcption to throw new validation message to form error message in the front end
+                'email' => 'Authentication Failed',
+            ]); // if the auth attempt fails, return validation error
         }
 
-        $request->session()->regenerate(); //regenerate session id each time log in is successful
+        // Check if the authenticated user's account status is 'disabled'
+        if (Auth::user()->acc_status === 'disabled') {
+            Auth::logout(); // Log out the user immediately
+            return abort(403, "Your account is disabled, Contact admin");
+        }
+
+        // Regenerate session ID after successful login
+        $request->session()->regenerate();
+
+        // Redirect to the intended page or homepage with a success message
         return redirect()->intended(route('homepage'))->with('success', "Log In Success!");
     }
 
-        public function destroy(Request $request)
+
+    public function destroy(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();

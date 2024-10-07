@@ -4,10 +4,8 @@ import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
     // server: {
-    //     host: '0.0.0.0', // This binds the server to all network interfaces.
-    //     hmr: {
-    //         host: '192.168.1.15', // Use your computer's local IP address
-    //     }
+    //     host: '0.0.0.0',
+    //     port: 5173,
     // },
     plugins: [
         laravel(['resources/js/app.js']),

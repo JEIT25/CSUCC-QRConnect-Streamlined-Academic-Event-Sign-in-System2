@@ -24,7 +24,7 @@
         <div class="input-error" v-if="form.errors.description">{{ form.errors.description }}</div>
       </div>
 
-      <!-- Start Date and School Year in a Row -->
+      <!-- Start Date, end date and School year in a row -->
       <div class="flex flex-wrap -mx-2 mb-4">
         <div class="w-full sm:w-1/2 px-2">
           <label for="start_date" class="block text-sm font-bold text-gray-700">Start Date</label>
@@ -35,6 +35,13 @@
           <label for="school_year" class="block text-sm font-bold text-gray-700">School Year (Optional)</label>
           <input v-model.trim="form.school_year" type="text" id="school_year" class="input" placeholder="e.g., 2023-2024" />
           <div class="input-error" v-if="form.errors.school_year">{{ form.errors.school_year }}</div>
+        </div>
+        
+       <div class="w-full sm:w-1/2 px-2">
+        <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+        <input v-model.trim="form.end_date" type="date" id="end_date" class="input" />
+        <div class="input-error" v-if="form.errors.end_date">
+            {{ form.errors.end_date }}
         </div>
       </div>
 
@@ -114,17 +121,18 @@ import { useForm } from '@inertiajs/vue3'
 import debounce from 'lodash/debounce'
 
 const form = useForm({
-  name: '',
-  description: '',
-  location: '',
-  start_date: '',
-  school_year: '',
-  semester: '',
-  profile_image: null,
-  type: 'class attendance',
-  other_type: '',
-  subject: '',
-  subject_code: '',
+    name: '',
+    description: '',
+    location: '',
+    start_date: '',
+    end_date: '',
+    school_year: '',  // New attribute for school year
+    semester: '',  // Default semester
+    profile_image: null,
+    type: 'class attendance',  // default type
+    other_type: '',  // for specifying if "other" is selected
+    subject: '',  // optional subject input
+    subject_code: '', // optional input
 })
 
 const handleFileUpload = (event) => {

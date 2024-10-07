@@ -1,16 +1,16 @@
 <?php
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendeeRecordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExportAttendeeRecordController;
 use App\Http\Controllers\MasterListMemberController;
 use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\QrScannerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MasterListController;
-use App\Http\Controllers\FacilitatorController;
-use App\Http\Controllers\StudentController;
 
 // Route::get('test', function () {
 //     return inertia('Index/Test', ["data" => "hi"]);
@@ -31,7 +31,10 @@ Route::get('login', fn () => inertia('Auth/Login'))//redirect to homepage wtoh a
 Route::post('login',[AuthController::class,'store'])
 ->name('login.store');
 
-Route::delete('logout', [AuthController::class, 'destroy']); //log out user
+Route::get('logout', fn() => (abort(404)));
+
+Route::delete('logout', [AuthController::class, 'destroy'])
+->name('login.destroy'); //log out user
 //
 
 //HOMEPAGE
@@ -48,18 +51,27 @@ Route::resource('events', EventController::class)
 
 //Route for exporting attendee_records based on template
 Route::get('/export-attendee-records/{event}/{template}',[ExportAttendeeRecordController::class,'ExportAttendeeRecords'])
-->name('attendee-records.export');
+->name('attendee-records.export')
+    ->middleware('auth');
 
-//Facilitator Routes
-Route::resource('facilitators', FacilitatorController::class)
-    ->only('create', 'show', 'store');
+//Admin routes
+Route::resource('admins',AdminController::class)
+->only('index')
+->middleware('auth');
+
+//User Routes for admin access only
+Route::resource('users', UserController::class)
+    ->only('index', 'create', 'show', 'store','destroy');
+
+Route::post('/users/{user}/{status}', [UserController::class, 'updateAccStatus']);
 //
+
 
 //Attendee Routes
 Route::get('/events/{event}/attendees', [AttendeeRecordController::class, 'index'])
     ->name('attendees.index')
     ->middleware('auth');
-;
+
 Route::delete('/events/{event}/attendees/{attendee}', [AttendeeRecordController::class, 'destroy'])
     ->name('attendees.destroy')
     ->middleware('auth');
@@ -88,6 +100,14 @@ Route::delete('master-list-members/{master_list_member}', [MasterListMemberContr
 //
 
 //QR scanner Routes
+Route::get('/events/{event}/qrscanner/single-signin', [QrScannerController::class, 'singleSignin'])
+    ->name('qrscanner.single-signin.get')
+    ->middleware('auth');
+
+Route::post('/events/{event}/qrscanner/single-signin', [QrScannerController::class, 'singleSigninPost'])
+    ->name('qrscanner.single-signin.post')
+    ->middleware('auth');
+
 Route::get('/events/{event}/qrscanner/checkin', [QrScannerController::class, 'checkin'])
     ->name('qrscanner.checkin.get')
     ->middleware('auth');
@@ -106,6 +126,6 @@ Route::post('/events/{event}/qrscanner/checkout', [QrScannerController::class, '
 //
 
 //QR Generator Routes
-Route::get('qr-generator/result/{user}', [QrCodeGeneratorController::class, 'show'])
-    ->name('qr-generator.show');
+// Route::get('qr-generator/result/{user}', [QrCodeGeneratorController::class, 'show'])
+//     ->name('qr-generator.show');
 //

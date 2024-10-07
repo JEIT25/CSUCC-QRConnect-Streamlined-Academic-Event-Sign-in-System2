@@ -18,6 +18,9 @@
                     <p class="text-sm text-gray-300">
                         <strong>Date:</strong> {{ new Date(event.start_date).toLocaleDateString() }}
                     </p>
+                    <p class="text-sm text-gray-300">
+                        <strong>End Date:</strong> {{ new Date(event.end_date).toLocaleDateString() }}
+                    </p>
                 </Link>
             </div>
         </div>
