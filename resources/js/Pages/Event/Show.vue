@@ -85,6 +85,8 @@
                                 <option value="" disabled>Select a template</option>
                                 <option value="class-orientation">Class Orientation</option>
                                 <option value="class-attendance">Class Attendance</option>
+                                <option value="midterm-exam">Midterm Exam</option>
+                                <option value="final-exam">Final Exam</option>
                                 <option value="general-template">Event Attendance (Check-in & Checkout)</option>
                             </select>
                         </div>

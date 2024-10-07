@@ -24,10 +24,15 @@ class ExportAttendeeRecordController extends Controller
         if ($template === "class-orientation") {
             return $this->exportClassOrientationToPDF($event, $selectedDate);
         }
-
         // Export as Excel for class attendance
         if ($template === "class-attendance") {
             return $this->exportClassAttendanceToExcel($event, $selectedDate);
+        }
+        if($template === "midterm-exam"){
+            return  $this->exportMidtermExamTemplate($event, $selectedDate);
+        }
+        if ($template === "final-exam"){
+            return  $this->exportFinalExamTemplate($event, $selectedDate);
         }
 
         // Redirect back if the template is invalid
@@ -206,5 +211,54 @@ class ExportAttendeeRecordController extends Controller
                 return $this->data; // Return the data array
             }
         }, $event->name . "_class_attendance.xlsx");
+    }
+    public function exportMidtermExamTemplate(Event $event, $selectedDate){
+
+        $attendeeRecords = $event->attendee_records();
+
+        if ($selectedDate && $selectedDate !==   'all'){
+            $attendeeRecords = $attendeeRecords-> whereDate('created_at',$selectedDate);
+        }
+        $attendeeRecords = $attendeeRecords
+            ->with('master_list_member')
+            ->orderBy('created_at','asc')
+            ->get();
+
+        if ($attendeeRecords->isEmpty()){
+            return redirect()->back()->with('field',"No exam attendees found for the selected date");
+        }
+
+        $pdf = Pdf:: loadView('pdf_templates/midterm_exam_templates',[
+            'event' =>  $event,
+            'attendee_records' => $attendeeRecords,
+            'facilitator' => $event->owner,
+            'itemsPerPage' => 20,
+        ]);
+        return  $pdf ->stream(filename: $event->name .  "_exam_attendees.pdf"); 
+    }
+
+    public function exportFinalExamTemplate(Event $event, $selectedDate){
+
+        $attendeeRecords = $event->attendee_records();
+
+        if ($selectedDate && $selectedDate !==   'all'){
+            $attendeeRecords = $attendeeRecords-> whereDate('created_at',$selectedDate);
+        }
+        $attendeeRecords = $attendeeRecords
+            ->with('master_list_member')
+            ->orderBy('created_at','asc')
+            ->get();
+
+        if ($attendeeRecords->isEmpty()){
+            return redirect()->back()->with('field',"No exam attendees found for the selected date");
+        }
+
+        $pdf = Pdf:: loadView('pdf_templates/final_exam_templates',[
+            'event' =>  $event,
+            'attendee_records' => $attendeeRecords,
+            'facilitator' => $event->owner,
+            'itemsPerPage' => 20,
+        ]);
+        return  $pdf ->stream(filename: $event->name .  "_exam_attendees.pdf"); 
     }
 }
