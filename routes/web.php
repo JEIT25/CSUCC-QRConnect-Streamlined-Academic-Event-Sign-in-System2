@@ -10,7 +10,6 @@ use Inertia\Inertia;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\FacilitatorController;
-use App\Http\Controllers\StudentController;
 
 // Route::get('test', function () {
 //     return inertia('Index/Test', ["data" => "hi"]);
@@ -34,7 +33,7 @@ Route::post('login',[AuthController::class,'store'])
 Route::delete('logout', [AuthController::class, 'destroy']); //log out user
 //
 
-//HOMEPAGE
+    //HOMEPAGE
 Route::get('/', function () {
     return Inertia::render('Index/Index');
 })->name('homepage');
